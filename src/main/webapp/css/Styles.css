@@ -11,6 +11,13 @@ and open the template in the editor.
 
 nav {
     text-align: left;
-    border: 2px;
+    border: 10px;
     float: right;
+}
+
+.bgimage {
+  background-image: url('../media/logo.png');
+  background-position: center center;
+  background-size: cover;
+  height: 200px;
 }
