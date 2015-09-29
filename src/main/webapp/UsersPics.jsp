@@ -10,16 +10,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <% response.sendRedirect("login.jsp"); %>
         <title>Instagrim</title>
-        <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
-    </head>
-    <body>
-        <header>
+        <link rel="stylesheet" type="text/css" href="css/Styles.css" />
+        <link href="css/bootstrap.css" type="text/css" rel="stylesheet"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <h1>InstaGrim ! </h1>
+         </head>
+         
+         <header class="bgimage"></header>
+    <body>
+        
+        
         <h2>Your world in Black and White</h2>
-        </header>
         
         <nav>
             <ul>

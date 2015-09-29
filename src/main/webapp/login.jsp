@@ -23,7 +23,7 @@
                
     <body>
     <div class="container">
-        <h2><center>Your world in Black and White<center></h2>
+        <h1><center>Your world in Black and White<center></h1>
     </div>
         <nav>
             <ul>
@@ -31,19 +31,31 @@
                 <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
             </ul>
         </nav>
+        <div class="container">
+            <div class="col-xs-6" align="center">
+        <div class="jumbotron">
        
-        <article>
-            <h3>Login</h3>
-            <form method="POST"  action="Login">
-                <ul>
-                    <li>User Name <input type="text" name="username"></li>
-                    <li>Password <input type="password" name="password"></li>
-                </ul>
-                <br/>
-                <input type="submit" value="Login"> 
-            </form>
+            <h2>Login</h2>
 
-        </article>
+            <form role="form" method="POST"  action="Login">
+                <div class="form-group">
+                    <label for="Name">User Name: </label> 
+                    <input type="text" name="username" size="20" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="Password"> Password: </label>  
+                    <input type="password" name="password" size="20" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-default">Login</button>
+                
+
+            </form>
+        </div>
+            </div>
+        </div>
+                
+
+        
         <footer>
             <ul>
                 <li class="footer"><a href="/Instagrim">Home</a></li>

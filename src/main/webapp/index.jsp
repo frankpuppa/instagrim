@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <% response.sendRedirect("login.jsp"); %>
+       <!-- <% response.sendRedirect("login.jsp"); %>-->
         <title>Instagrim</title>
         <link rel="stylesheet" type="text/css" href="css/Styles.css" />
         <link href="css/bootstrap.css" type="text/css" rel="stylesheet"/>
