@@ -4,49 +4,34 @@
     Author     : Administrator
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <% response.sendRedirect("login.jsp"); %>
-        <title>Instagrim</title>
-        <link rel="stylesheet" type="text/css" href="css/Styles.css" />
-        <link href="css/bootstrap.css" type="text/css" rel="stylesheet"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-         </head>
-         
-         <header class="bgimage"></header>
-    <body>
-        <header>
-        <h1>InstaGrim ! </h1>
-        <h2>Your world in Black and White</h2>
-        </header>
-        <nav>
-            <ul>
-                
-                <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
-            </ul>
-        </nav>
-       
-        <article>
+<div class="container-fluid">
+    <h1>INSTAgrim ! </h1> <h2>Your world in Black and White</h2>
+
+    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-2">
+        <div class="jumbotron">
+
             <h3>Register as user</h3>
             <form method="POST"  action="Register">
-                <ul>
-                    <li>User Name <input type="text" name="username"></li>
-                    <li>Password <input type="password" name="password"></li>
-                </ul>
-                <br/>
-                <input type="submit" value="Register"> 
+                <div class="form-group">
+                    <label for="Name">User Name: </label> 
+                    <input type="text" name="username" size="20" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="Password"> Password: </label>  
+                    <input type="password" name="password" size="20" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-default">Register</button>
             </form>
+        </div>
+    </div>
 
-        </article>
-        <footer>
-            <ul>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
-            </ul>
-        </footer>
-    </body>
-</html>
+
+<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-2 text-center " id="bar" >
+
+    <ul class="list-inline" >
+        <li><a href="/Instagrim">Home</a></li>
+        <li><a href="/Instagrim/Images/majed">Sample Images</a></li
+
+    </ul>
+</div>
+    </div>

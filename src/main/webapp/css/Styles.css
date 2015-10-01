@@ -9,8 +9,8 @@ and open the template in the editor.
 */
 
 
-nav {
-    text-align: left;
+nav2 {
+    text-align: center;
     border: 10px;
     float: right;
 }
@@ -20,4 +20,22 @@ nav {
   background-position: center center;
   background-size: cover;
   height: 200px;
+}
+.bgfootimg{
+  background-image: url('../media/logo3.png');
+  background-position: center center;
+  background-size: cover;
+  height: 80px;
+  bottom:0;
+  width:100%;
+  /*position:absolute;*/
+}
+
+#bar{
+    background-color:#F6F6F6;
+   /* position: absolute; */
+    /*bottom:80px; */
+    height:50px;
+    line-height: 50px;
+    border-radius: 25px;
 }

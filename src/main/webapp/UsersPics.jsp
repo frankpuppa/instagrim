@@ -10,21 +10,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <% response.sendRedirect("login.jsp"); %>
-        <title>Instagrim</title>
         <link rel="stylesheet" type="text/css" href="css/Styles.css" />
         <link href="css/bootstrap.css" type="text/css" rel="stylesheet"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-         </head>
-         
-         <header class="bgimage"></header>
+
+        <title>Instagrim</title>
+
+    </head>
     <body>
-        
-        
+        <header class="bgimage"></header>
+         
+         
+        <h1>InstaGrim ! </h1>
         <h2>Your world in Black and White</h2>
+        </header>
         
         <nav>
             <ul>
@@ -46,18 +46,17 @@
             iterator = lsPics.iterator();
             while (iterator.hasNext()) {
                 Pic p = (Pic) iterator.next();
-
         %>
         <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
-
             }
             }
         %>
         </article>
-        <footer>
+        
+        
+        <footer class="bgfootimg">
             <ul>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
             </ul>
         </footer>
-    </body>
 </html>
