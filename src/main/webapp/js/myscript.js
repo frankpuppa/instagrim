@@ -7,11 +7,20 @@
 
       var bodyheight = jQuery('body').height();
       var windowheight = jQuery(window).height();
-      console.log(bodyheight);
-      console.log(windowheight);
+      
+      var wWidth= $(window).width();
+      var barwidth= $("#bar").outerWidth(true);
+      var center= (wWidth/2) - (barwidth/2);
+//     // console.log(bodyheight);
+//      //console.log(windowheight);
+//      console.log("barwidth " + barwidth);
+//     console.log("bodywidth " + wWidth +"px");
+//     console.log("center " + center +"px");
+
 
  if (bodyheight<windowheight){
-        $(".bgfootimg").css("position", "absolute");
-        $("#bar").css("position", "absolute");
-        $("#bar").css("bottom", "80px");
-    }
+      $(".bgfootimg").css("position", "absolute");
+      $("#bar").css("position", "absolute");
+      $("#bar").css("bottom", "80px");
+      $("#bar").css("margin-left", center );
+        }

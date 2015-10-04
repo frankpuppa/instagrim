@@ -5,7 +5,7 @@
 --%>
 
 <div class="container-fluid">
-    <h1>INSTAgrim ! </h1> <h2>Your world in Black and White</h2>
+    <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
 
     <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-2">
         <div class="jumbotron">
@@ -26,7 +26,7 @@
     </div>
 
 
-<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-2 text-center " id="bar" >
+<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
     <ul class="list-inline" >
         <li><a href="/Instagrim">Home</a></li>
