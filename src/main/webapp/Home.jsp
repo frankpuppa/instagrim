@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h2>Hello <%=request.getSession().getAttribute("user")%></h2>
+        <a href="Logout">Logout</a>
     </body>
 </html>

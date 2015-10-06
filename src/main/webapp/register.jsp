@@ -20,6 +20,23 @@
                     <label for="Password"> Password: </label>  
                     <input type="password" name="password" size="20" class="form-control">
                 </div>
+                <div class="form-group">
+                    <label for="first_name"> First Name: </label>  
+                    <input type="text" name="first_name" size="25" class="form-control">
+                </div>
+                 <div class="form-group">
+                    <label for="last_name"> Last Name: </label>  
+                    <input type="text" name="last_name" size="25" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="email"> Email: </label>  
+                    <input type="text" name="email" size="25" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="address"> Address: </label>  
+                    <textarea rows="2" cols="20" name="address" maxlength="100" class="form-control" style="resize:vertical"> </textarea>
+                </div>
+                 
                 <button type="submit" class="btn btn-default">Register</button>
             </form>
         </div>

@@ -4,24 +4,23 @@
  * and open the template in the editor.
  */
 package uk.ac.dundee.computing.aec.instagrim.servlets;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author frank
  */
-@WebServlet(name = "Home", urlPatterns = {"/Home"})
-public class Home extends HttpServlet {
+@WebServlet(name = "Logout", urlPatterns = {"/Logout"})
+public class Logout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,23 +33,25 @@ public class Home extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+//        response.setContentType("text/html;charset=UTF-8");
+//        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet Logout</title>");            
+//            out.println("</head>");
+//            out.println("<body>");
+//            out.println("<h1>Servlet Logout at " + request.getContextPath() + "</h1>");
+//            out.println("</body>");
+//            out.println("</html>");
+//        }
+        //RequestDispatcher rd=request.getRequestDispatcher("/");
             HttpSession session=request.getSession();
-            LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-            session.setAttribute("user", lg.getUsername());
-           RequestDispatcher rd;
-           
-                    if (lg != null) {
-                    rd=request.getRequestDispatcher("Home.jsp");
-                     response.setContentType("text/html");  
-                        
-                    }else{
-                    rd=request.getRequestDispatcher("login.jsp");
-                    }
-                    rd.forward(request,response);
-            //response.sendRedirect("/Instagrim/Images/" + lg.getUsername()); 
+            session.invalidate();
+            //rd.forward(request,response);
+            response.sendRedirect("/Instagrim/");
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

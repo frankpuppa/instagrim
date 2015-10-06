@@ -69,11 +69,22 @@ public class Login extends HttpServlet {
 	    //rd.forward(request,response);
             response.sendRedirect("/Instagrim/Home");
         }else{
-            response.sendRedirect("/Instagrim/login");
+            response.sendRedirect("/Instagrim/Login");
         }
         
     }
-
+    
+    /**
+     * Returns a short description of the servlet.
+     *
+     * return to the Login Page
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect("login.jsp");
+    }
+    
     /**
      * Returns a short description of the servlet.
      *
