@@ -14,13 +14,8 @@
     </welcome-file-list>-->
     <jsp-config>
     <jsp-property-group>
-        <description>header and footer settings</description>
-       <!-- <url-pattern>/test.jsp</url-pattern>-->
-        <url-pattern>/login.jsp</url-pattern>
+        <description>header and footer settings</description>      
         <url-pattern>/index.jsp</url-pattern>
-        <url-pattern>/register.jsp</url-pattern>
-        <url-pattern>/upload.jsp</url-pattern>      
-        <url-pattern>/Home.jsp</url-pattern>
         <url-pattern>/WEB-INF/view/*</url-pattern>
         <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
         <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
@@ -29,5 +24,14 @@
 <!--     <servlet-mapping>
           <servlet-name>Home</servlet-name>
           <url-pattern>/Home</url-pattern>
-      </servlet-mapping>-->
+      </servlet-mapping>
+      <servlet-mapping>
+    <servlet-name>Login</servlet-name>
+    <url-pattern>/Login</url-pattern>
+     </servlet-mapping>
+      <servlet-mapping>
+    <servlet-name>test</servlet-name>
+    <url-pattern>/test</url-pattern>
+     </servlet-mapping>-->
+     
 </web-app>

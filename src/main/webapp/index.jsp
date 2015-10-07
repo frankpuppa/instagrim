@@ -8,7 +8,7 @@
     
 </script>
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
-<div class="container" id="test">
+<div class="container">
      
     <h2> <center>Your world in Black and White</center></h2>
      <!--col-md-offset-3 col-sm-4 col-sm-offset-3 col-xs-7 col-xs-offset-2 text-center-->    
@@ -29,8 +29,8 @@
                 <%}
                 } else {
                 %>
-            <li><a href="register.jsp">Register</a></li>
-            <li><a href="login.jsp">Login</a></li>
+            <li><a href="/Instagrim/Register">Register</a></li>
+            <li><a href="/Instagrim/Login">Login</a></li>
                 <%
                                             }%>
 

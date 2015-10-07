@@ -60,7 +60,7 @@ public class Login extends HttpServlet {
             LoggedIn lg= new LoggedIn();
             lg.setLogedin();
             lg.setUsername(username);
-            //request.setAttribute("LoggedIn", lg);
+            request.setAttribute("LoggedIn", lg);
             
             session.setAttribute("LoggedIn", lg);
             System.out.println("Session in servlet "+session);
@@ -82,7 +82,9 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("login.jsp");
+       // response.sendRedirect("/views/login.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/login.jsp");
+        rd.forward(request, response);
     }
     
     /**
