@@ -15,7 +15,9 @@ import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -83,10 +85,10 @@ public class User {
        public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
-       public String[] getUserDetails(String username){
-        String[] values=new String[5];
+       public ArrayList<String> getUserDetails(String username){
+        ArrayList<String> values=new ArrayList<>();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select login, addresses, email, first_name, last_name FROM userprofiles WHERE login=?");
+        PreparedStatement ps = session.prepare("select login, addresses, email, first_name, last_name, follow FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -97,12 +99,17 @@ public class User {
             return null;
         } else {
             for (Row row : rs) {
-               values[0]=row.getString("login");
-               values[1]=row.getString("addresses");
-               values[2]=row.getString("email");
-               values[3]=row.getString("first_name");
-               values[4]=row.getString("last_name");
-   
+               values.add(0, row.getString("login"));
+               values.add(1, row.getString("addresses"));
+               values.add(2, row.getString("email"));
+               values.add(3, row.getString("first_name"));
+               values.add(4, row.getString("last_name"));
+               Set<String> m=row.getSet("follow",  String.class);
+               int j=5;
+                for (String g : m){
+                values.add(j,g);
+                j++;
+               }
             }
             return values;
         }
@@ -113,7 +120,7 @@ public class User {
            ArrayList<ArrayList<String>> users= new ArrayList<>();
         
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select login, first_name, last_name, email FROM userprofiles WHERE login=?");
+        PreparedStatement ps = session.prepare("select login, first_name, last_name, email, follow FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -129,11 +136,57 @@ public class User {
                x.add(1,row.getString("first_name"));
                x.add(2,row.getString("last_name"));       
                x.add(3,row.getString("email"));
+               Set<String> m=row.getSet("follow",  String.class);
+               int j=4;
+                for (String g : m){
+                x.add(j,g);
+                j++;
+                        }
                users.add(x);
             }
             return users;
         }
        
+       }
+       public boolean followUser(String userN,String username){
+           Set<String> follow=new HashSet<String>();
+           follow.add(userN);
+           Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("UPDATE userprofiles SET follow = follow + ? WHERE login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        follow,username));
+        if (rs.isExhausted()) {
+            System.out.println("User Addedd to Follow");
+            return true;
+        } else {
+//            for (Row row : rs) {
+//               //follow.add(row.getString(""));
+//            }
+            return true;
+        }
+       }
+       
+       public boolean unfollowUser(String username){
+           Set<String> follow=new HashSet<String>();
+           Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select follow FROM userprofiles WHERE login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return false;
+        } else {
+            for (Row row : rs) {
+               follow.add(row.getString("email"));
+            }
+            return true;
+        }
        }
 
     

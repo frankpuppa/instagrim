@@ -6,11 +6,9 @@
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
+import java.lang.Boolean;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,18 +16,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
-
+import uk.ac.dundee.computing.aec.instagrim.models.User;
 
 /**
  *
  * @author frank
  */
-@WebServlet(name = "Search", urlPatterns = {"/Search"})
-public class Search extends HttpServlet {
-    Cluster cluster=null;
+@WebServlet(name = "Follow", urlPatterns = {"/Follow"})
+public class Follow extends HttpServlet {
+Cluster cluster=null;
     
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
@@ -46,27 +42,13 @@ public class Search extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
-    HttpSession session = request.getSession();
-     //   LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-        RequestDispatcher rd;
-//        String action = request.getParameter("act");
-        
-         //   session.setAttribute("user", lg.getUsername());
-            rd = request.getRequestDispatcher("/WEB-INF/view/Search.jsp");
-//           response.setContentType("text/html");
-           String action = request.getParameter("fname");
-           if(action!=null && !action.equals("")){
+        String action = (String)request.getParameter("userN");
+           
+        if(action!=null && !action.equals("")){
                
-               searchUser(request, response ,action);
+               followUser(request,response,action);
            }
-         
-          // Set standard HTTP/1.1 no-cache headers.
-           response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
-          // Set standard HTTP/1.0 no-cache header.
-           response.setHeader("Pragma", "no-cache");
-          //forward request 
-           rd.forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -107,28 +89,40 @@ public class Search extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-     /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void searchUser(HttpServletRequest request, HttpServletResponse response,String username)
+    
+    protected void followUser(HttpServletRequest request, HttpServletResponse response, String userN)
             throws ServletException, IOException {
-        
-        User us=new User();
+         User us=new User();
             us.setCluster(cluster);
-            //HttpSession session = request.getSession();
-            //String username=(String)session.getAttribute("user");
-            ArrayList<ArrayList<String>> users=us.searchUser(username);
+            HttpSession session = request.getSession();
+            String username=(String)session.getAttribute("user");
+             boolean test=us.followUser(userN,username);
             //System.out.println("Value array " +values[0]);
-            request.setAttribute("usersV", users);
+            //request.setAttribute("usersV", users);
             //System.out.println("Session in servlet "+session);
-        
+             if(test){
+                 //ystem.out.println("OK USER ADDED");
+                 response.sendRedirect("/Instagrim/Home");
+             }else{
+                 displayError(response,userN);
+             }
     }
     
-    
+    private void displayError(HttpServletResponse response, String user) 
+            throws ServletException, IOException {
+        
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Error</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h3> Request could not be satisfied. The user " + user + " has not been added to the follow list </h3>");
+            out.println("</body>");
+            out.println("</html>");
+        
+        }
+
+    }
 }

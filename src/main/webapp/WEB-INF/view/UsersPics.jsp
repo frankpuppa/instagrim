@@ -22,29 +22,32 @@
     <body>
         
         <div class="container">
-            <h2>Your world in Black and White</h2>
-        </header>
-
-        <article>
-            <h3>Your Pics</h3>
-            <%
-                java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
-                if (lsPics == null) {
-            %>
-            <p>No Pictures found</p>
-            <%
-            } else {
-                Iterator<Pic> iterator;
-                iterator = lsPics.iterator();
-                while (iterator.hasNext()) {
-                    Pic p = (Pic) iterator.next();
-            %>
-            <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
+            <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
+            <div class="row">
+                <article>
+                    <h3>Your Pics</h3>
+                    
+                    <%
+                        java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
+                        if (lsPics == null) {
+                    %>
+                    <p>No Pictures found</p>
+                    <%
+                    } else {
+                        Iterator<Pic> iterator;
+                        iterator = lsPics.iterator();%>
+                        <table class="table"><tr>
+                        <% while (iterator.hasNext()) {
+                            Pic p = (Pic) iterator.next();
+                    %>
+                    <td>
+                        <a href="/Instagrim/Image/<%=p.getSUUID()%>"><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a></td><br/><%
                     }
                 }
-                %>
-        </article>
-
+                        %></tr>
+                        </table>
+                </article>
+            </div>
 
 
         <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >

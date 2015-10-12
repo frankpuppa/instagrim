@@ -32,6 +32,7 @@
                     <td>First Name</td>
                     <td>Last Name</td>
                     <td>Email</td>
+                    <td>Follow</td>
                 </tr>
                 <% if (array != null) {
                      for(int i=0; i<array.size(); i++){ %>
@@ -40,6 +41,11 @@
                          <% for(int j=0; j<array.get(i).size(); j++){  %>         
                         <td> <%= array.get(i).get(j) %> </td>
                         <%}%>
+                        <td>
+                            <form action="/Instagrim/Follow" method="POST">
+                                <input type="hidden" name="userN" value="<%= array.get(i).get(0) %>">
+                            <input type="submit" name="name" value="Follow"></td>
+                            </form>
                      </tr>
                      <%}%>
                      <%}%>

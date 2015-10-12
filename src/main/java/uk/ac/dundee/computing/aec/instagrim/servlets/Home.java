@@ -8,6 +8,7 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -125,7 +126,7 @@ public class Home extends HttpServlet {
             us.setCluster(cluster);
             HttpSession session = request.getSession();
             String username=(String)session.getAttribute("user");
-            String[] values=us.getUserDetails(username);
+            ArrayList<String> values=us.getUserDetails(username);
             //System.out.println("Value array " +values[0]);
             request.setAttribute("userData", values);
             //System.out.println("Session in servlet "+session);

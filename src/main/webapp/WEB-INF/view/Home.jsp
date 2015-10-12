@@ -53,37 +53,58 @@
                                 <!-- Default panel contents -->
                                 <div class="panel-heading">User Details</div>
                                 
-                                <% String[] array = (String[]) request.getAttribute("userData");%>
+                                <% ArrayList<String> array = (ArrayList<String>) request.getAttribute("userData");%>
                                 <% if (array != null) {%>
                                 <!-- Table -->
                                 <table class="table">
 
                                     <tr>
                                         <td>Login Name</td>
-                                        <td><%=array[0]%> </td>
-                                        <td><a href="#">Edit</a></td>
+                                        <td><%=array.get(0)%> </td>
+                                        <td><form action="/Instagrim/EditValue" method="POST">
+                                            <input type="hidden" name="userN" value="<%= array.get(0) %>">
+                                            <input type="submit" name="name" value="Edit">
+                                            </form></td>
                                     </tr>
                                      <tr>
                                         <td>First Name</td>
-                                        <td><%=array[3]%> </td>
-                                        <td><a href="#">Edit</a></td>
+                                        <td><%=array.get(3)%> </td>
+                                        <td><form action="/Instagrim/EditValue" method="POST">
+                                            <input type="hidden" name="userN" value="<%= array.get(3) %>">
+                                            <input type="submit" name="name" value="Edit">
+                                            </form></td>
                                     </tr>
                                     <tr>
                                         <td>Last Name</td>
-                                        <td><%=array[4]%> </td>
-                                        <td><a href="#">Edit</a></td>
+                                        <td><%=array.get(4)%> </td>
+                                        <td><form action="/Instagrim/EditValue" method="POST">
+                                            <input type="hidden" name="userN" value="<%= array.get(4) %>">
+                                            <input type="submit" name="name" value="Edit">
+                                            </form></td>
                                     </tr>
                                     
                                     <tr>
                                         <td>Email</td>
-                                        <td><%=array[2]%> </td>
-                                        <td><a href="#">Edit</a></td>
+                                        <td><%=array.get(2)%> </td>
+                                        <td><form action="/Instagrim/EditValue" method="POST">
+                                            <input type="hidden" name="userN" value="<%= array.get(2) %>">
+                                            <input type="submit" name="name" value="Edit">
+                                            </form></td>
                                     </tr>
                                     
                                      <tr>
                                         <td>Address</td>
-                                        <td><%=array[1]%> </td>
-                                        <td><a href="#">Edit</a></td>
+                                        <td><%=array.get(1)%> </td>
+                                        <td><form action="/Instagrim/EditValue" method="POST">
+                                            <input type="hidden" name="userN" value="<%= array.get(1) %>">
+                                            <input type="submit" name="name" value="Edit">
+                                            </form></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Follow</td>
+                                        <td><% for(int i=5; i< array.size(); i++){%>
+                                        <%=array.get(i)%> <%}%> </td>
+<!--                                        <td><a href="#">Edit</a></td>-->
                                     </tr>
 
                                 </table>
