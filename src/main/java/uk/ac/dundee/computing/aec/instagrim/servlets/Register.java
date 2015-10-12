@@ -45,17 +45,31 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username=request.getParameter("username");
-        String password=request.getParameter("password");
-        String first_name=request.getParameter("first_name");
-        String last_name=request.getParameter("last_name");
-        String email=request.getParameter("email");
-        String address=request.getParameter("address");
-        
+//        String username=request.getParameter("username");
+//        String password=request.getParameter("password");
+//        String first_name=request.getParameter("first_name");
+//        String last_name=request.getParameter("last_name");
+//        String email=request.getParameter("email");
+//        String address=request.getParameter("address");
+        String[] values =new String[6];
+//        for(int i=0; i<6; i++){
+//                values[i]=new String();
+//            }
+        values[0]=request.getParameter("username");
+        values[1]=request.getParameter("password");
+        values[2]=request.getParameter("first_name");
+        values[3]=request.getParameter("last_name");
+        values[4]=request.getParameter("email");
+        values[5]=request.getParameter("address");
+        for(int i=0; i<6; i++){
+                if(values[i]==""){
+                    values[i]=null;
+                }
+            }
         User us=new User();
         us.setCluster(cluster);
-        us.RegisterUser(username, password, first_name, last_name, email, address);
-        
+        //us.RegisterUser(username, password, first_name, last_name, email, address);
+        us.RegisterUser(values[0],values[1],values[2],values[3],values[4],values[5]);
 	response.sendRedirect("/Instagrim");
         
     }

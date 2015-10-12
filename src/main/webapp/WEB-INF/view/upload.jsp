@@ -5,14 +5,8 @@
 --%>
 
     <body>
+        <div class="container">
         <h2>Your world in Black and White</h2>
-        <nav>
-            <ul>
-                <li class="nav"><a href="upload.jsp">Upload</a></li>
-                <li class="nav"><a href="/Instagrim/Images/majed">Sample Images</a></li>
-            </ul>
-        </nav>
- 
         <article>
             <h3>File Upload</h3>
             <form method="POST" enctype="multipart/form-data" action="Image">
@@ -23,4 +17,12 @@
             </form>
 
         </article>
-     
+     <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
+
+            <ul class="list-inline" >
+                <li><a href="/Instagrim">Index</a></li>
+                <li><a href="/Instagrim/Home">Home</a></li> 
+                <li><a href="/Instagrim/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
+            </ul>
+        </div>  
+        </div>

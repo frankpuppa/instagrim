@@ -8,33 +8,33 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+
 
 /**
  *
  * @author frank
  */
-@WebServlet(name = "Home", urlPatterns = {"/Home","/Home/*"})
-public class Home extends HttpServlet {
-    
+@WebServlet(name = "Search", urlPatterns = {"/Search"})
+public class Search extends HttpServlet {
     Cluster cluster=null;
     
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
     }
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,28 +46,27 @@ public class Home extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-           
-        HttpSession session = request.getSession();
-        LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+    
+    HttpSession session = request.getSession();
+     //   LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
         RequestDispatcher rd;
 //        String action = request.getParameter("act");
         
-            session.setAttribute("user", lg.getUsername());
-            rd = request.getRequestDispatcher("/WEB-INF/view/Home.jsp");
+         //   session.setAttribute("user", lg.getUsername());
+            rd = request.getRequestDispatcher("/WEB-INF/view/Search.jsp");
 //           response.setContentType("text/html");
-          
-           getUserData(request,response);
+           String action = request.getParameter("fname");
+           if(action!=null){
+               searchUser(request, response ,action);
+           }
+         
           // Set standard HTTP/1.1 no-cache headers.
            response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
-
           // Set standard HTTP/1.0 no-cache header.
            response.setHeader("Pragma", "no-cache");
-           
+          //forward request 
            rd.forward(request, response);
-        //response.sendRedirect("/Instagrim/Home"); 
-        
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -108,7 +107,7 @@ public class Home extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    /**
+     /**
      * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
@@ -116,20 +115,19 @@ public class Home extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void getUserData(HttpServletRequest request, HttpServletResponse response)
+    protected void searchUser(HttpServletRequest request, HttpServletResponse response,String username)
             throws ServletException, IOException {
-        //try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            
-            User us=new User();
+        
+        User us=new User();
             us.setCluster(cluster);
-            HttpSession session = request.getSession();
-            String username=(String)session.getAttribute("user");
-            String[] values=us.getUserDetails(username);
+            //HttpSession session = request.getSession();
+            //String username=(String)session.getAttribute("user");
+            ArrayList<ArrayList<String>> users=us.searchUser(username);
             //System.out.println("Value array " +values[0]);
-            request.setAttribute("userData", values);
+            request.setAttribute("usersV", users);
             //System.out.println("Session in servlet "+session);
-            
-       // }
+        
     }
+    
+    
 }

@@ -10,17 +10,31 @@
       
       var wWidth= $(window).width();
       var barwidth= $("#bar").outerWidth(true);
-      var center= (wWidth/2) - (barwidth/2);
-//     // console.log(bodyheight);
-//      //console.log(windowheight);
-//      console.log("barwidth " + barwidth);
+      var center= (wWidth/2) - (barwidth/2); //some math to center the bar
+      var sidebar=windowheight-280; //header +footer
+      
+    //console.log("sidebar"+sidebar);
+//console.log("bodyheight" + bodyheight);
+//console.log("windowheight"+windowheight);
+//     console.log("barwidth " + barwidth);
 //     console.log("bodywidth " + wWidth +"px");
 //     console.log("center " + center +"px");
-
-
+      $("#sidebar-wrapper").css("height", (sidebar+"px"));
  if (bodyheight<windowheight){
       $(".bgfootimg").css("position", "absolute");
       $("#bar").css("position", "absolute");
       $("#bar").css("bottom", "80px");
-      $("#bar").css("margin-left", center );
+      $("#bar").css("margin-left", center+"px" );
         }
+        
+// function hideShowClick() {
+//     if($("#testtt").is(":visible")){
+//         $("#testtt").hide();
+//     }else{
+//         $("#testtt").show();
+//     }
+//}
+//function test(){
+//    document.getElementById('form1').submit();
+//  //  hideShowClick();
+//}

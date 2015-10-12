@@ -6,7 +6,7 @@
 	 version="3.1">
     <session-config>
         <session-timeout>
-            1
+            30
         </session-timeout>
     </session-config>
    <!--<welcome-file-list>
@@ -16,11 +16,27 @@
     <jsp-property-group>
         <description>header and footer settings</description>      
         <url-pattern>/index.jsp</url-pattern>
-        <url-pattern>/WEB-INF/view/*</url-pattern>
+        <url-pattern>/WEB-INF/view/Home.jsp</url-pattern>
+        <url-pattern>/WEB-INF/view/Search.jsp</url-pattern>
+        <url-pattern>/WEB-INF/view/login.jsp</url-pattern>
+        <url-pattern>/WEB-INF/view/register.jsp</url-pattern>
+        <url-pattern>/WEB-INF/view/test.jsp</url-pattern>
+        <url-pattern>/WEB-INF/view/upload.jsp</url-pattern>
         <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
         <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
     </jsp-property-group>
     </jsp-config>
+    <filter>
+        <filter-name>ProtectPages</filter-name>
+        <filter-class>uk.ac.dundee.computing.aec.instagrin.filters.ProtectPages</filter-class>
+    </filter>
+    <filter-mapping>
+    <filter-name>ProtectPages</filter-name>
+    <url-pattern>/Home</url-pattern>
+    <url-pattern>/Upload</url-pattern>
+    <url-pattern>/Images</url-pattern>
+<!--    <url-pattern>/Login</url-pattern>-->
+  </filter-mapping>
 <!--     <servlet-mapping>
           <servlet-name>Home</servlet-name>
           <url-pattern>/Home</url-pattern>

@@ -98,7 +98,7 @@ public class Image extends HttpServlet {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
-        RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/UsersPics.jsp");
         request.setAttribute("Pics", lsPics);
         rd.forward(request, response);
 
@@ -150,7 +150,7 @@ public class Image extends HttpServlet {
 
                 is.close();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/upload.jsp");
              rd.forward(request, response);
         }
 

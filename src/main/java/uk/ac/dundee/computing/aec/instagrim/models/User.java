@@ -14,6 +14,8 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -37,12 +39,12 @@ public class User {
             return false;
         }
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
+        PreparedStatement ps = session.prepare("insert into userprofiles (login,password,first_name,last_name,email,addresses) Values(?,?,?,?,?,?)");
        
         BoundStatement boundStatement = new BoundStatement(ps);
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        username,EncodedPassword));
+                        username,EncodedPassword,first_name,last_name,email,address));
         //We are assuming this always works.  Also a transaction would be good here !
         
         return true;
@@ -76,12 +78,63 @@ public class User {
             }
         }
    
-    
     return false;  
     }
        public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
+       public String[] getUserDetails(String username){
+        String[] values=new String[5];
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select login, addresses, email, first_name, last_name FROM userprofiles WHERE login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+               values[0]=row.getString("login");
+               values[1]=row.getString("addresses");
+               values[2]=row.getString("email");
+               values[3]=row.getString("first_name");
+               values[4]=row.getString("last_name");
+   
+            }
+            return values;
+        }
+       
+       }
+       public ArrayList<ArrayList<String>> searchUser(String username){
+        
+           ArrayList<ArrayList<String>> users= new ArrayList<>();
+        
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select login, first_name, last_name, email FROM userprofiles WHERE login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+                ArrayList<String> x = new ArrayList<>();
+               x.add(0,row.getString("login")); 
+               x.add(1,row.getString("first_name"));
+               x.add(2,row.getString("last_name"));       
+               x.add(3,row.getString("email"));
+               users.add(x);
+            }
+            return users;
+        }
+       
+       }
 
     
 }
