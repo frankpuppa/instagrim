@@ -35,22 +35,33 @@
                     <td>Follow</td>
                 </tr>
                 <% if (array != null) {
-                     for(int i=0; i<array.size(); i++){ %>
-                     <tr>
-                         <td> <%= i+1%></td>
-                         <% for(int j=0; j<array.get(i).size(); j++){  %>         
-                        <td> <%= array.get(i).get(j) %> </td>
-                        <%}%>
+                        for (int i = 0; i < array.size(); i++) {%>
+                
+                    <td> <%= i + 1%></td>
+                    <% for (int j = 0; j < array.get(i).size(); j++) {%>    
+                    <td> <%=array.get(i).get(j)%></td>
+                    <% if (j == 3 && array.get(i).size() > 4) {%>
+                    <td><select>
+                  <% for(int h =4; h < array.get(i).size(); h++) {%>
+                  <option disabled="disabled"><%= array.get(i).get(h) %></option>
+                                  
+                    <%}%>
+                        </select></td>         
+                    <% break;
+                                   } %>
+                    <%}%>
+
+                            
                         <td>
                             <form action="/Instagrim/Follow" method="POST">
                                 <input type="hidden" name="userN" value="<%= array.get(i).get(0) %>">
-                            <input type="submit" name="name" value="Follow"></td>
+                            <input type="submit" name="name" value="Follow">
                             </form>
-                     </tr>
+                    
                      <%}%>
                      <%}%>
-    
             </table>
+            
         </div>
     </div>
     </div>

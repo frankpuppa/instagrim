@@ -34,17 +34,25 @@
                     <p>No Pictures found</p>
                     <%
                     } else {
+                            int i=3;
                         Iterator<Pic> iterator;
                         iterator = lsPics.iterator();%>
-                        <table class="table"><tr>
+                        <table class="table">
+                            
                         <% while (iterator.hasNext()) {
                             Pic p = (Pic) iterator.next();
+                            if((i % 3)==0){
                     %>
-                    <td>
-                        <a href="/Instagrim/Image/<%=p.getSUUID()%>"><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a></td><br/><%
+                    <tr>
+                        <%}%>
+                        <td><a href="/Instagrim/Image/<%=p.getSUUID()%>"><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a></td><br/>
+                    <%i--;
+                    if(i==0){%>
+                        </tr>
+                    <% i=3; }
                     }
                 }
-                        %></tr>
+                        %>
                         </table>
                 </article>
             </div>

@@ -101,10 +101,17 @@
                                             </form></td>
                                     </tr>
                                     <tr>
+                                        <%if(array.size()>5){%>
                                         <td>Follow</td>
-                                        <td><% for(int i=5; i< array.size(); i++){%>
-                                        <%=array.get(i)%> <%}%> </td>
-<!--                                        <td><a href="#">Edit</a></td>-->
+                                        <td><form action="/Instagrim/Unfollow" method="POST">
+                                            <select name="follow"><% for(int i=5; i< array.size(); i++){%>
+                                                <option selected="selected"><%=array.get(i)%></option> 
+                                                    <%}%></select>
+                                                    <input type="hidden" name="userN" value="<%=request.getParameter("follow") %>">
+                                                <input type="submit" name="name" value="Unfollow">
+                                            </form>
+                                        </td>
+                                        <%}%>
                                     </tr>
 
                                 </table>
