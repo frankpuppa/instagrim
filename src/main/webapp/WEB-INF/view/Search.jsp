@@ -6,6 +6,7 @@
 
 
 
+<%@page import="java.util.Set"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 
@@ -22,7 +23,8 @@
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">Results</div>
-                <%  ArrayList<ArrayList<String>> array = (ArrayList<ArrayList<String>>)request.getAttribute("usersV");%>
+                <%  ArrayList<ArrayList<String>> array = (ArrayList<ArrayList<String>>)request.getAttribute("usersV");
+                    Set<String>followedUsers = (Set<String>)request.getAttribute("followedUsers");%>
                                 
             <!-- Table -->
             <table class="table">
@@ -40,15 +42,15 @@
                     <td> <%= i + 1%></td>
                     <% for (int j = 0; j < array.get(i).size(); j++) {%>    
                     <td> <%=array.get(i).get(j)%></td>
-                    <% if (j == 3 && array.get(i).size() > 4) {%>
-                    <td><select>
-                  <% for(int h =4; h < array.get(i).size(); h++) {%>
-                  <option disabled="disabled"><%= array.get(i).get(h) %></option>
+                    <%}%>
+                   <% if(followedUsers!=null) {%>
+                   <td><select>
+                        <%for (String s : followedUsers){%>%>  
+                            <option disabled="disabled"><%=s %></option>
                                   
                     <%}%>
-                        </select></td>         
-                    <% break;
-                                   } %>
+                       </select></td>
+                       
                     <%}%>
 
                             

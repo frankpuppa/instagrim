@@ -51,71 +51,61 @@
                         <div class="container-fluid">
                             <div class="panel panel-default">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading">User Details</div>
+                                <div class="panel-heading">User Details
+                                    <div class="pull-right">
+                                <form  action="/Instagrim/Home" method="GET">
+                                            <input type="hidden" name="param" value="edit">
+                                            <input  type="submit" name="name" value="Edit">
+                                            </form>
+                                    </div>
+                                </div>
                                 
-                                <% ArrayList<String> array = (ArrayList<String>) request.getAttribute("userData");%>
+                                <% ArrayList<String> array = (ArrayList<String>) request.getAttribute("userData");
+                                   Set<String>followedUsers = (Set<String>)request.getAttribute("followedUsers");%>
                                 <% if (array != null) {%>
                                 <!-- Table -->
                                 <table class="table">
 
                                     <tr>
-                                        <td>Login Name</td>
+                                        <td>User Name</td>
                                         <td><%=array.get(0)%> </td>
-                                        <td><form action="/Instagrim/EditValue" method="POST">
-                                            <input type="hidden" name="userN" value="<%= array.get(0) %>">
-                                            <input type="submit" name="name" value="Edit">
-                                            </form></td>
                                     </tr>
                                      <tr>
                                         <td>First Name</td>
                                         <td><%=array.get(3)%> </td>
-                                        <td><form action="/Instagrim/EditValue" method="POST">
-                                            <input type="hidden" name="userN" value="<%= array.get(3) %>">
-                                            <input type="submit" name="name" value="Edit">
-                                            </form></td>
                                     </tr>
                                     <tr>
                                         <td>Last Name</td>
                                         <td><%=array.get(4)%> </td>
-                                        <td><form action="/Instagrim/EditValue" method="POST">
-                                            <input type="hidden" name="userN" value="<%= array.get(4) %>">
-                                            <input type="submit" name="name" value="Edit">
-                                            </form></td>
                                     </tr>
                                     
                                     <tr>
                                         <td>Email</td>
                                         <td><%=array.get(2)%> </td>
-                                        <td><form action="/Instagrim/EditValue" method="POST">
-                                            <input type="hidden" name="userN" value="<%= array.get(2) %>">
-                                            <input type="submit" name="name" value="Edit">
-                                            </form></td>
                                     </tr>
                                     
                                      <tr>
                                         <td>Address</td>
                                         <td><%=array.get(1)%> </td>
-                                        <td><form action="/Instagrim/EditValue" method="POST">
-                                            <input type="hidden" name="userN" value="<%= array.get(1) %>">
-                                            <input type="submit" name="name" value="Edit">
-                                            </form></td>
                                     </tr>
+                                     <%}%>
+                                     
+                                       <% if(followedUsers.size()!=0) {%>  
                                     <tr>
-                                        <%if(array.size()>5){%>
                                         <td>Follow</td>
                                         <td><form action="/Instagrim/Unfollow" method="POST">
-                                            <select name="follow"><% for(int i=5; i< array.size(); i++){%>
-                                                <option selected="selected"><%=array.get(i)%></option> 
+                                            <select name="follow"><% for (String s : followedUsers){%>
+                                                <option selected="selected"><%=s%></option> 
                                                     <%}%></select>
                                                     <input type="hidden" name="userN" value="<%=request.getParameter("follow") %>">
                                                 <input type="submit" name="name" value="Unfollow">
                                             </form>
                                         </td>
-                                        <%}%>
+                                       
                                     </tr>
-
+                                        <%}%>
                                 </table>
-                                <%}%>
+                                
                                 </div>
                             </div>
                         </div> 

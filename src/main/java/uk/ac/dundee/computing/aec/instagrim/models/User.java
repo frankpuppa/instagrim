@@ -30,16 +30,22 @@ public class User {
     public User(){
         
     }
-    
-    public boolean RegisterUser(String username, String Password, String first_name, String last_name, String email, String address){
-        AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
-        String EncodedPassword=null;
+    protected String getEncodedPassword(String password){
+           AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
+        String EncodedPassword;
         try {
-            EncodedPassword= sha1handler.SHA1(Password);
+            EncodedPassword= sha1handler.SHA1(password);
         }catch (UnsupportedEncodingException | NoSuchAlgorithmException et){
             System.out.println("Can't check your password");
-            return false;
+            return null;
         }
+        return EncodedPassword;
+       }
+    
+    public boolean RegisterUser(String username, String password, String first_name, String last_name, String email, String address){
+        String EncodedPassword=getEncodedPassword(password);
+        if(EncodedPassword==null)
+            return false;
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("insert into userprofiles (login,password,first_name,last_name,email,addresses) Values(?,?,?,?,?,?)");
        
@@ -88,7 +94,7 @@ public class User {
        public ArrayList<String> getUserDetails(String username){
         ArrayList<String> values=new ArrayList<>();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select login, addresses, email, first_name, last_name, follow FROM userprofiles WHERE login=?");
+        PreparedStatement ps = session.prepare("select login, addresses, email, first_name, last_name FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -104,23 +110,48 @@ public class User {
                values.add(2, row.getString("email"));
                values.add(3, row.getString("first_name"));
                values.add(4, row.getString("last_name"));
-               Set<String> m=row.getSet("follow",  String.class);
-               int j=5;
-                for (String g : m){
-                values.add(j,g);
-                j++;
-               }
+//               Set<String> m=row.getSet("follow",  String.class);
+//               int j=5;
+//                for (String g : m){
+//                values.add(j,g);
+//                j++;
+               
             }
             return values;
         }
+       }
        
+       public Set<String> getFollowedUsers(String username){
+       //ArrayList<String> users=new ArrayList<>();
+        Set<String> users = null;
+           Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select follow FROM userprofiles WHERE login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+               users=row.getSet("follow",  String.class);
+              
+//                for (String g : m){
+//                values.add(j,g);
+//                j++;
+//               }
+            }
+            return users;
+        }
        }
        public ArrayList<ArrayList<String>> searchUser(String username){
         
            ArrayList<ArrayList<String>> users= new ArrayList<>();
         
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select login, first_name, last_name, email, follow FROM userprofiles WHERE login=?");
+        PreparedStatement ps = session.prepare("select login, first_name, last_name, email FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -136,12 +167,12 @@ public class User {
                x.add(1,row.getString("first_name"));
                x.add(2,row.getString("last_name"));       
                x.add(3,row.getString("email"));
-               Set<String> m=row.getSet("follow",  String.class);
-               int j=4;
-                for (String g : m){
-                x.add(j,g);
-                j++;
-                        }
+//               Set<String> m=row.getSet("follow",  String.class);
+//               int j=4;
+//                for (String g : m){
+//                x.add(j,g);
+//                j++;
+//                        }
                users.add(x);
             }
             return users;
@@ -149,7 +180,7 @@ public class User {
        
        }
        public boolean followUser(String userN,String username){
-           Set<String> follow=new HashSet<String>();
+           Set<String> follow=new HashSet<>();
            follow.add(userN);
            Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("UPDATE userprofiles SET follow = follow + ? WHERE login=?");
@@ -169,25 +200,55 @@ public class User {
         }
        }
        
-       public boolean unfollowUser(String username){
-           Set<String> follow=new HashSet<String>();
+       public boolean unfollowUser(String followeduser, String username){ 
+            Set<String> follow=new HashSet<>();
+           follow.add(followeduser);
            Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select follow FROM userprofiles WHERE login=?");
+        PreparedStatement ps = session.prepare("UPDATE userprofiles SET follow = follow - ? where login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        username));
+                        follow,username));
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
-            return false;
-        } else {
-            for (Row row : rs) {
-               follow.add(row.getString("email"));
-            }
             return true;
+        } else {
+//            for (Row row : rs) {
+//               
+//            }
+            return false;
         }
        }
+       public boolean updateProfile(String username, String password, String first_name, String last_name, String email, String address){
+        String EncodedPassword;
+        Session session = cluster.connect("instagrim");
+        
+        if(password!=null){
+            EncodedPassword=getEncodedPassword(password);
+                if(EncodedPassword==null){
+                    return false;
+                }
+            PreparedStatement ps = session.prepare("update userprofiles SET password=?, first_name=?, last_name=?,email=?,addresses=? where login=?");
+            BoundStatement boundStatement = new BoundStatement(ps);
+            session.execute( // this is where the query is executed
+            boundStatement.bind( // here you are binding the 'boundStatement'
+                        EncodedPassword,first_name,last_name,email,address,username));
+        //We are assuming this always works.  Also a transaction would be good here !
+        
+        
+        }else{
+            PreparedStatement ps = session.prepare("update userprofiles SET first_name=?, last_name=?, email=?, addresses=? where login=?");
+        BoundStatement boundStatement = new BoundStatement(ps);
+        session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                       first_name,last_name,email,address,username));
+        //We are assuming this always works.  Also a transaction would be good here !
+        }
+        return true;
+    }
+       
+       
 
     
 }

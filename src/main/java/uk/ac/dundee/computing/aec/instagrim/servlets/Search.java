@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -124,8 +125,10 @@ public class Search extends HttpServlet {
             //HttpSession session = request.getSession();
             //String username=(String)session.getAttribute("user");
             ArrayList<ArrayList<String>> users=us.searchUser(username);
+            Set<String>followedUsers=us.getFollowedUsers(username);
             //System.out.println("Value array " +values[0]);
-            request.setAttribute("usersV", users);
+             request.setAttribute("usersV", users);
+             request.setAttribute("followedUsers", followedUsers);
             //System.out.println("Session in servlet "+session);
         
     }

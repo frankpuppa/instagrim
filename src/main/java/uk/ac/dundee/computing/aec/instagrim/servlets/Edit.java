@@ -7,7 +7,7 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
-import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,9 +22,8 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
  *
  * @author frank
  */
-@WebServlet(name = "Unfollow", urlPatterns = {"/Unfollow"})
-public class Unfollow extends HttpServlet {
-
+@WebServlet(name = "Edit", urlPatterns = {"/Edit"})
+public class Edit extends HttpServlet {
     Cluster cluster=null;
     
     public void init(ServletConfig config) throws ServletException {
@@ -41,12 +40,7 @@ public class Unfollow extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = (String)request.getParameter("follow");
-        unFollow(request,response,action);
-        //System.out.println("The action is " + action);
-        
-        
+            throws ServletException, IOException {        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,7 +55,22 @@ public class Unfollow extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        HttpSession session = request.getSession();
+     //   LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+        RequestDispatcher rd;
+//        String action = request.getParameter("act");
+        
+         //   session.setAttribute("user", lg.getUsername());
+            rd = request.getRequestDispatcher("/WEB-INF/view/Edit.jsp");
+//           response.setContentType("text/html");
+           
+          // Set standard HTTP/1.1 no-cache headers.
+          // response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
+          // Set standard HTTP/1.0 no-cache header.
+          // response.setHeader("Pragma", "no-cache");
+          //forward request 
+           rd.forward(request, response);
     }
 
     /**
@@ -75,7 +84,6 @@ public class Unfollow extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -88,35 +96,22 @@ public class Unfollow extends HttpServlet {
         return "Short description";
     }// </editor-fold>
     
-    protected void unFollow(HttpServletRequest request, HttpServletResponse response,String userfollowed)
+    protected void editValues(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-             User us=new User();
+        //try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            
+            User us=new User();
             us.setCluster(cluster);
             HttpSession session = request.getSession();
             String username=(String)session.getAttribute("user");
-            boolean test=us.unfollowUser(userfollowed,username);
-            if(test){
-                 //ystem.out.println("OK USER ADDED");
-                 response.sendRedirect("/Instagrim/Home");
-             }else{
-                 displayError(response,userfollowed);
-             }
-    }
-    private void displayError(HttpServletResponse response, String user) 
-            throws ServletException, IOException {
-        
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Error</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h3> Request could not be satisfied. The user " + user + " has not been removed from the follow list </h3>");
-            out.println("</body>");
-            out.println("</html>");
-        
-        }
 
+            //System.out.println("Value array " +values[0]);
+            //request.setAttribute("userData", values);
+            //request.setAttribute("followedUsers",followedUsers);
+            //System.out.println("Session in servlet "+session);
+            
+       // }
     }
+    
 }
