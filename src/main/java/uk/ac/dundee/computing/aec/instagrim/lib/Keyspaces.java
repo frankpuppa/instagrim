@@ -49,9 +49,18 @@ public final class Keyspaces {
                     //+ "      email set<text>,\n"
                     + "      email text,\n"
                     + "      addresses text,\n"
+                    + "      about text,\n"
                   //+ "      addresses  map<text, frozen <address>>\n"
                     + "      follow set<text>,\n"
+                    + "      profilepic varchar\n"
                     + "  );";
+            String CreateCommentTable="CREATE TABLE if not exists instagrim.comment (\n"
+                    + "     commentid uuid, \n"
+                    + "     comment   text, \n"
+                    + "     picid     uuid, \n"
+                    + "     otheruser text, \n"
+                    + "     PRIMARY KEY(commentid,picid)\n"
+                    + ");";
             Session session = c.connect();
             try {
                 PreparedStatement statement = session
@@ -96,6 +105,13 @@ public final class Keyspaces {
             } catch (Exception et) {
                 System.out.println("Can't create Address Profile " + et);
             }
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreateCommentTable);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create Comment Table " + et);
+            }
+            
             session.close();
 
         } catch (Exception et) {

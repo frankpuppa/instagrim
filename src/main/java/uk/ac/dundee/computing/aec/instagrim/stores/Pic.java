@@ -18,6 +18,7 @@ public class Pic {
     private int length;
     private String type;
     private java.util.UUID UUID=null;
+    private String owner;
     
     public void Pic() {
 
@@ -51,5 +52,12 @@ public class Pic {
         byte image[] = Bytes.getArray(bImage);
         return image;
     }
-
+    
+    public String getOwner(){
+        return owner;
+    }
+    
+    public void setOwner(String newOwner){
+        owner=newOwner;
+    }
 }

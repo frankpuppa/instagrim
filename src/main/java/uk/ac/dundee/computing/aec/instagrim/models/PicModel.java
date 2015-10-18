@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
@@ -132,8 +133,8 @@ public class PicModel {
         return pad(img, 4);
     }
    
-    public java.util.LinkedList<Pic> getPicsForUser(String User) {
-        java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
+    public LinkedList<Pic> getPicsForUser(String User, LinkedList<Pic> Pics) {
+       // LinkedList<Pic> Pics = new LinkedList<>();
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
         ResultSet rs = null;
@@ -147,6 +148,7 @@ public class PicModel {
         } else {
             for (Row row : rs) {
                 Pic pic = new Pic();
+                pic.setOwner(User);
                 java.util.UUID UUID = row.getUUID("picid");
                 System.out.println("UUID" + UUID.toString());
                 pic.setUUID(UUID);
@@ -212,5 +214,60 @@ public class PicModel {
         return p;
 
     }
+    protected Date getPicAdded(UUID id){
+        Date picdate = new Date();
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select interaction_time from pics where picid=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        id));
+        if (rs.isExhausted()) {
+            System.out.println("error");
+            return null;
+        } else {
+            for (Row row : rs) {
+                picdate=row.getDate("interaction_time");
+
+            }
+            return picdate;
+        }
+    }
+    public boolean deletePhoto(String picid, String username){
+        UUID id= UUID.fromString(picid);
+        Date pic_added = getPicAdded(id);
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("delete from userpiclist where user = ? and  pic_added= ?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username, pic_added));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return true;
+        } else {
+            return false;
+        }
+    }
+//    public Pic getProfilePic(String picid){
+//        Pic pic=
+//        UUID id= UUID.fromString(picid);
+//        Date pic_added = getPicAdded(id);
+//        Session session = cluster.connect("instagrim");
+//        PreparedStatement ps = session.prepare("delete from userpiclist where user = ? and  pic_added= ?");
+//        ResultSet rs = null;
+//        BoundStatement boundStatement = new BoundStatement(ps);
+//        rs = session.execute( // this is where the query is executed
+//                boundStatement.bind( // here you are binding the 'boundStatement'
+//                        username, pic_added));
+//        if (rs.isExhausted()) {
+//            System.out.println("No Images returned");
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
 }

@@ -11,16 +11,22 @@
       var wWidth= $(window).width();
       var barwidth= $("#bar").outerWidth(true);
       var center= (wWidth/2) - (barwidth/2); //some math to center the bar
-      var sidebar=windowheight-280; //header +footer
-      
+    //  var sidebar=windowheight-280; //header +footer
+      var containerHomeHeight=$("#AA").height();
+    //  console.log("DIV "+ containerHomeHeight);
     //console.log("sidebar"+sidebar);
 //console.log("bodyheight" + bodyheight);
 //console.log("windowheight"+windowheight);
 //     console.log("barwidth " + barwidth);
 //     console.log("bodywidth " + wWidth +"px");
 //     console.log("center " + center +"px");
-      $("#sidebar-wrapper").css("height", (sidebar+"px"));
- if (bodyheight<windowheight){
+//          $("#sidebar-wrapper").css("height", (sidebar+"px"));
+
+/*      SET DIV CONTAINER HEIGHT    */
+$("#sidebar-wrapper").css("height", (containerHomeHeight+"px"));
+
+/*      SET BOTTOM TOOLBAR AND FOOTER   */
+if (bodyheight<windowheight){
       $(".bgfootimg").css("position", "absolute");
       $("#bar").css("position", "absolute");
       $("#bar").css("bottom", "80px");

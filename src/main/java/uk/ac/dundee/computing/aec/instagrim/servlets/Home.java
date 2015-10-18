@@ -81,6 +81,7 @@ public class Home extends HttpServlet {
             }
 //           response.setContentType("text/html");
           
+           getProfilePic(request,response);
            getUserData(request,response);
           // Set standard HTTP/1.1 no-cache headers.
            response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
@@ -184,5 +185,14 @@ public class Home extends HttpServlet {
         
         }
 
+    }
+    protected void getProfilePic(HttpServletRequest request, HttpServletResponse response){
+         User us=new User();
+            us.setCluster(cluster);
+            HttpSession session = request.getSession();
+            String username=(String)session.getAttribute("user");
+            String picid=us.getProfilePhoto(username);
+            request.setAttribute("profilepic",picid);
+            //System.out.println("Session in servlet "+session);
     }
 }

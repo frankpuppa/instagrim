@@ -248,7 +248,39 @@ public class User {
         return true;
     }
        
+       public boolean setProfilePhoto(String picid, String username){
+        
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("UPDATE userprofiles SET profilepic = ? where login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        picid,username));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return true;
+        } 
+        return false;
+       }
+       public String getProfilePhoto(String username){
+           String picid=null;
+           Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select profilepic FROM userprofiles WHERE login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+                picid=row.getString("profilepic");
+            }
+            return picid;
+        }
        
-
-    
-}
+       }
+}   

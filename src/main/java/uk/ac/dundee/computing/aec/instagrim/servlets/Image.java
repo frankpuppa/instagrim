@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -25,6 +27,7 @@ import org.apache.commons.fileupload.util.Streams;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
+import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -36,7 +39,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
     "/Image/*",
     "/Thumb/*",
     "/Images",
-    "/Images/*"
+    "/Images/*",
+    "/DeletePhoto",
+    "/SetProfile"
 })
 @MultipartConfig
 
@@ -54,9 +59,11 @@ public class Image extends HttpServlet {
     public Image() {
         super();
         // TODO Auto-generated constructor stub
-        CommandsMap.put("Image", 1);
+        CommandsMap.put("Image", 1); //upload
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
+        CommandsMap.put("DeletePhoto",4);
+        CommandsMap.put("SetProfile", 5);
 
     }
 
@@ -79,15 +86,22 @@ public class Image extends HttpServlet {
             error("Bad Operator", response);
             return;
         }
+        //argv[0]=Instagrim argv[1]=Images argv[3]=username
         switch (command) {
             case 1:
                 DisplayImage(Convertors.DISPLAY_PROCESSED,args[2], response);
                 break;
-            case 2:
+            case 2: 
                 DisplayImageList(args[2], request, response);
                 break;
             case 3:
                 DisplayImage(Convertors.DISPLAY_THUMB,args[2],  response);
+                break;
+            case 4:
+                    deletePhoto(request,response);
+                break;
+            case 5:
+                    updateProfilePic(request,response);
                 break;
             default:
                 error("Bad Operator", response);
@@ -95,9 +109,24 @@ public class Image extends HttpServlet {
     }
 
     private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        User us=new User();
+        us.setCluster(cluster);
+        
+        Set<String>followedUsers=us.getFollowedUsers(User);
+        
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
-        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
+        
+        LinkedList<Pic> lsPics=new LinkedList<>();
+        lsPics= tm.getPicsForUser(User, lsPics);
+        
+        if(followedUsers!=null) {
+        for (String user : followedUsers){
+           lsPics= tm.getPicsForUser(user, lsPics); 
+        }
+        }
+        
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/UsersPics.jsp");
         request.setAttribute("Pics", lsPics);
         rd.forward(request, response);
@@ -150,8 +179,9 @@ public class Image extends HttpServlet {
 
                 is.close();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/upload.jsp");
-             rd.forward(request, response);
+            response.sendRedirect("/Instagrim/Images/" + username);
+           // RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/upload.jsp");
+           //  rd.forward(request, response);
         }
 
     }
@@ -164,5 +194,32 @@ public class Image extends HttpServlet {
         out.println("<h2>" + mess + "</h2>");
         out.close();
         return;
+    }
+    protected void deletePhoto(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String username=(String)session.getAttribute("user");
+        String picid = (String)request.getParameter("delete");
+        PicModel pm=new PicModel();
+            pm.setCluster(cluster);
+          if (pm.deletePhoto(picid, username)) {
+            response.sendRedirect("/Instagrim/Images/" + username);
+        } else {
+           error("Photo Could not be deleted", response);
+        }
+         
+            
+    }
+    protected void updateProfilePic(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String username=(String)session.getAttribute("user");
+        String picid = (String)request.getParameter("setProfile");
+        
+        User us=new User();
+        us.setCluster(cluster);
+        if(us.setProfilePhoto(picid, username)){
+	response.sendRedirect("/Instagrim/Home");
+        }else{
+            error("Profile Picture could not be set", response);
+        } 
     }
 }

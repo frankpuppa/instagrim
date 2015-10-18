@@ -29,6 +29,7 @@
                     
                     <%
                         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
+                        String username=(String)request.getSession().getAttribute("user");
                         if (lsPics == null) {
                     %>
                     <p>No Pictures found</p>
@@ -37,6 +38,7 @@
                             int i=3;
                         Iterator<Pic> iterator;
                         iterator = lsPics.iterator();%>
+                        <div class="container-fluid">
                         <table class="table">
                             
                         <% while (iterator.hasNext()) {
@@ -45,7 +47,21 @@
                     %>
                     <tr>
                         <%}%>
-                        <td><a href="/Instagrim/Image/<%=p.getSUUID()%>"><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a></td><br/>
+                        
+                        <td><div class="container-fluid">
+                            <a href="/Instagrim/Image/<%=p.getSUUID()%>"><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a>
+                            <%if(p.getOwner().equals(username)){%>
+                            <form  action="/Instagrim/DeletePhoto" method="GET">
+                                <input  type="hidden" name="delete" value="<%=p.getSUUID()%>">
+                                <input  type="submit" name="name" value="Delete">
+                            </form>
+                            <%}%>
+                            <form  action="/Instagrim/SetProfile" method="GET">
+                                <input   type="hidden" name="setProfile" value="<%=p.getSUUID()%>">
+                                <input   type="submit" name="name" value="Set as Profile">
+                            </form>
+                        </div></td><br/>
+                        
                     <%i--;
                     if(i==0){%>
                         </tr>
@@ -54,6 +70,7 @@
                 }
                         %>
                         </table>
+                        </div>
                 </article>
             </div>
 

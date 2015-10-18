@@ -56,10 +56,10 @@ public class Search extends HttpServlet {
          //   session.setAttribute("user", lg.getUsername());
             rd = request.getRequestDispatcher("/WEB-INF/view/Search.jsp");
 //           response.setContentType("text/html");
-           String action = request.getParameter("fname");
-           if(action!=null && !action.equals("")){
+           String user = request.getParameter("fname");
+           if(user!=null && !user.equals("")){
                
-               searchUser(request, response ,action);
+               searchUser(request, response ,user);
            }
          
           // Set standard HTTP/1.1 no-cache headers.
