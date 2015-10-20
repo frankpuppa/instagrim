@@ -13,13 +13,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.aec.instagrim.lib.DbData;
 
 /**
  *
  * @author frank
  */
-@WebServlet(name = "test", urlPatterns = {"/test"})
-public class test extends HttpServlet {
+@WebServlet(name = "About", urlPatterns = {
+    "/About",
+    "/About/*"
+})
+public class About extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,21 +38,7 @@ public class test extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-//        try (PrintWriter out = response.getWriter()) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet test</title>");            
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet test at " + request.getContextPath() + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
-        RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/test.jsp");
-        rd.forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,7 +53,18 @@ public class test extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        String username=(String)session.getAttribute("user");
+        String args[] = Convertors.SplitRequestPath(request);
+        request.setAttribute("uservisited",args[2]);
+        DbData db=new DbData();
+        String picid=db.getProfilePic(args[2]);
+        String about=db.getAbout(args[2]);
+        request.setAttribute("profilepic",picid);
+        request.setAttribute("about", about);
+        RequestDispatcher rd;
+        rd = request.getRequestDispatcher("/WEB-INF/view/About.jsp");
+        rd.forward(request, response);
     }
 
     /**

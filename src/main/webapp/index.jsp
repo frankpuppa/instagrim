@@ -11,9 +11,9 @@
     <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
         <ul class="list-inline" >
-            <li><a href="/Instagrim/Home">Home</a></li>
-            <li><a href="/Instagrim/Register">Register</a></li>
-            <li><a href="/Instagrim/Login">Login</a></li>
+            <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+            <li><a href="${pageContext.request.contextPath}/Register">Register</a></li>
+            <li><a href="${pageContext.request.contextPath}/Login">Login</a></li>
         </ul>
     </div>
 </div>           

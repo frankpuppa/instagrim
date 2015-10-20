@@ -70,7 +70,8 @@ public class Register extends HttpServlet {
         us.setCluster(cluster);
         //us.RegisterUser(username, password, first_name, last_name, email, address);
         us.RegisterUser(values[0],values[1],values[2],values[3],values[4],values[5]);
-	response.sendRedirect("/Instagrim");
+        String path=request.getContextPath();
+	response.sendRedirect(path);
         
     }
     
@@ -86,7 +87,8 @@ public class Register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/register.jsp");
+         RequestDispatcher rd;
+        rd = request.getRequestDispatcher("/WEB-INF/view/Register.jsp");
          rd.forward(request,response);
     }
     

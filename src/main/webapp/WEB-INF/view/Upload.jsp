@@ -20,9 +20,9 @@
      <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
             <ul class="list-inline" >
-                <li><a href="/Instagrim">Index</a></li>
-                <li><a href="/Instagrim/Home">Home</a></li> 
-                <li><a href="/Instagrim/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
+                <li><a href="${pageContext.request.contextPath}">Index</a></li>
+                <li><a href="${pageContext.request.contextPath}/Home">Home</a></li> 
+                <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
             </ul>
         </div>  
         </div>

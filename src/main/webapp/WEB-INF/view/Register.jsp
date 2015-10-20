@@ -1,8 +1,9 @@
 <%-- 
-    Document   : register.jsp
-    Created on : Sep 28, 2014, 6:29:51 PM
-    Author     : Administrator
+    Document   : Register
+    Created on : 20-Oct-2015, 16:40:08
+    Author     : frank
 --%>
+
 
 <div class="container-fluid">
     <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
@@ -46,8 +47,8 @@
 <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
     <ul class="list-inline" >
-        <li><a href="/Instagrim">Home</a></li>
-        <li><a href="/Instagrim/Images/majed">Sample Images</a></li
+        <li><a href="${pageContext.request.contextPath}">Home</a></li>
+<!--        <li><a href="${pageContext.request.contextPath}/Images/majed">Sample Images</a></li-->
 
     </ul>
 </div>

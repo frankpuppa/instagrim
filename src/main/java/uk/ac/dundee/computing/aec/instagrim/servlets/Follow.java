@@ -97,12 +97,13 @@ Cluster cluster=null;
             HttpSession session = request.getSession();
             String username=(String)session.getAttribute("user");
              boolean test=us.followUser(userN,username);
+             String path=request.getContextPath();
             //System.out.println("Value array " +values[0]);
             //request.setAttribute("usersV", users);
             //System.out.println("Session in servlet "+session);
              if(test){
                  //ystem.out.println("OK USER ADDED");
-                 response.sendRedirect("/Instagrim/Home");
+                 response.sendRedirect(path + "/Home");
              }else{
                  displayError(response,userN);
              }

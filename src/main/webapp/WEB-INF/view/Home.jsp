@@ -17,31 +17,20 @@
                     <h3> Hello <%=request.getSession().getAttribute("user")%></h3>
                 </li>
                 <li>
-                    <!--                    <form id="form1" action="/Instagrim/Home" method="GET"> 
+                    <!--                    <form id="form1" action="${pageContext.request.contextPath}/Home" method="GET"> 
                                              <input type="submit" value="uiserd" name="act"> Profile Info
-                                            <a href="/Instagrim/Home" name="act" value="userd" onclick="$(this).closest('form1').submit()">Profile Info</a>
+                                            <a href="${pageContext.request.contextPath}/Home" name="act" value="userd" onclick="$(this).closest('form1').submit()">Profile Info</a>
                                            <input type="hidden" name="act" value="userd">
-                                            <a href="/Instagrim/Home" onclick="test();">Profile Info</a>
+                                            <a href="${pageContext.request.contextPath}/Home" onclick="test();">Profile Info</a>
                                         </form>-->
-                    <a href="/Instagrim/Home/<%=request.getSession().getAttribute("user")%>"> Profile Info</a></li>
+                    <!--<a href="${pageContext.request.contextPath}/Home/<%=request.getSession().getAttribute("user")%>"> Profile Info</a></li>-->
                 </li>
                 <li>
-                    <a href="/Instagrim/Search">Search users</a>
+                    <a href="${pageContext.request.contextPath}/Search">Search users</a>
                 </li>
+                
                 <li>
-                    <a href="#"></a>
-                </li>
-                <li>
-                    <a href="#">Events</a>
-                </li>
-                <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
+                    <a href="${pageContext.request.contextPath}/About/<%=request.getSession().getAttribute("user")%>">About</a>
                 </li>
             </ul>
         </div>
@@ -53,15 +42,14 @@
                                    if (picid == null) {%>
                 <img src="media/defaultavatar.png">
                 <% } else {%>  
-                <img src="/Instagrim/Thumb/<%=picid%>">
+                <img src="${pageContext.request.contextPath}/Thumb/<%=picid%>">
                 <%}%>
                 <br/><br/>
                 <div class="panel panel-default">
                     <!-- Default panel contents -->
                     <div class="panel-heading">User Details
                         <div class="pull-right">
-                            <form  action="/Instagrim/Home" method="GET">
-                                <input type="hidden" name="param" value="edit">
+                            <form  action="${pageContext.request.contextPath}/Home/Edit" method="GET">
                                 <input  type="submit" name="name" value="Edit">
                             </form>
                         </div>
@@ -94,12 +82,19 @@
                             <td>Address</td>
                             <td><%=array.get(1)%> </td>
                         </tr>
+                        <tr>
+                            <td>About</td>
+                            <td><%=array.get(5)%> </td>
+                            <td><form  action="${pageContext.request.contextPath}/Home/EditAbout" method="GET">
+                                    <input  type="submit" name="name" value="Edit">
+                                </form></td>
+                        </tr>
                         <%}%>
 
                         <% if (followedUsers.size() != 0) {%>  
                         <tr>
                             <td>Follow</td>
-                            <td><form action="/Instagrim/Unfollow" method="POST">
+                            <td><form action="${pageContext.request.contextPath}/Unfollow" method="POST">
                                     <select name="follow"><% for (String s : followedUsers) {%>
                                         <option selected="selected"><%=s%></option> 
                                         <%}%></select>
@@ -122,9 +117,9 @@
     <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
         <ul class="list-inline" >
-            <li><a href="/Instagrim">Index</a></li>
-            <li><a href="/Instagrim/Upload">Upload</a></li>   
-            <li><a href="/Instagrim/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
+            <li><a href="${pageContext.request.contextPath}">Index</a></li>
+            <li><a href="${pageContext.request.contextPath}/Upload">Upload</a></li>   
+            <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
             <li><a href="Logout">Logout</a></li>
         </ul>
     </div>

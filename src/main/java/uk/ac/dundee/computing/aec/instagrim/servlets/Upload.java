@@ -33,7 +33,7 @@ public class Upload extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher rd;
-        rd = request.getRequestDispatcher("/WEB-INF/view/upload.jsp");
+        rd = request.getRequestDispatcher("/WEB-INF/view/Upload.jsp");
             response.setContentType("text/html");
             rd.forward(request, response);
     }

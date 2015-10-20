@@ -9,6 +9,7 @@ import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.aec.instagrim.lib.DbData;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
@@ -27,14 +30,20 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  *
  * @author frank
  */
-@WebServlet(name = "Home", urlPatterns = {"/Home","/Home/*"})
+@WebServlet(name = "Home", urlPatterns = {"/Home","/Home/Edit", "/Home/EditAbout"})
 public class Home extends HttpServlet {
     
     Cluster cluster=null;
+    private HashMap CommandsMap; 
+    
     
     public void init(ServletConfig config) throws ServletException {
+        CommandsMap = new HashMap();
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
+        CommandsMap.put("Edit", 1);
+        CommandsMap.put("EditAbout", 2);
+       
     }
     
     /**
@@ -64,24 +73,38 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn"); 
+        session.setAttribute("user", lg.getUsername());
+        RequestDispatcher rd =request.getRequestDispatcher("/WEB-INF/view/Home.jsp");
         
+        String args[] = Convertors.SplitRequestPath(request);
+        if(args.length <3 ){
+                rd = request.getRequestDispatcher("/WEB-INF/view/Home.jsp");
+                getProfilePic(request,response);
+        }else{
+        int command;
+        try {
+            command = (Integer) CommandsMap.get(args[2]);
+        } catch (Exception et) {
+            displayError("Bad Operator", response);
+            return;
+        }
         
-       HttpSession session = request.getSession();
-        LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-        RequestDispatcher rd;
-//        String action = request.getParameter("act");
-        
-            session.setAttribute("user", lg.getUsername());
-            String action = (String)request.getParameter("param");
-            
-            if(action != null){
-            rd = request.getRequestDispatcher("/WEB-INF/view/Edit.jsp");
-            }else{
-            rd = request.getRequestDispatcher("/WEB-INF/view/Home.jsp");
+            switch (command) {
+                case 1:
+                    rd = request.getRequestDispatcher("/WEB-INF/view/Edit.jsp");
+                    break;
+                case 2:
+                    rd = request.getRequestDispatcher("/WEB-INF/view/EditAbout.jsp");
+                    break;
+                default:
+                    displayError("Bad Operator", response);
             }
-//           response.setContentType("text/html");
+        }
+       
           
-           getProfilePic(request,response);
+           
            getUserData(request,response);
           // Set standard HTTP/1.1 no-cache headers.
            response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
@@ -90,7 +113,7 @@ public class Home extends HttpServlet {
            response.setHeader("Pragma", "no-cache");
            
            rd.forward(request, response);
-        //response.sendRedirect("/Instagrim/Home"); 
+        //response.sendRedirect("/InstagrimFrank/Home"); 
     }
 
     /**
@@ -104,7 +127,14 @@ public class Home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        updateProfile(request,response);
+        String value=request.getParameter("submit");
+        switch (value) {
+            case "about":
+                break;
+            case "edit":
+                updateProfile(request,response);
+                break;
+        }
     }
 
     /**
@@ -147,6 +177,8 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
+        String path=request.getContextPath();
+	
         
         String[] values =new String[6];
         values[0]=(String)session.getAttribute("user");
@@ -155,6 +187,7 @@ public class Home extends HttpServlet {
         values[3]=request.getParameter("last_name");
         values[4]=request.getParameter("email");
         values[5]=request.getParameter("address");
+        values[6]=request.getParameter("about");
         for(int i=0; i<values.length; i++){
                 if(values[i]==""){
                     values[i]=null;
@@ -163,13 +196,13 @@ public class Home extends HttpServlet {
         User us=new User();
         us.setCluster(cluster);
         //us.RegisterUser(username, password, first_name, last_name, email, address);
-        if(us.updateProfile(values[0],values[1],values[2],values[3],values[4],values[5])){
-	response.sendRedirect("/Instagrim");
+        if(us.updateProfile(values[0],values[1],values[2],values[3],values[4],values[5],values[6])){
+	response.sendRedirect(path);
         }else{
-            displayError(response);
+            displayError("Profile Could not be update! Sorry...",response);
         }
     }
-    private void displayError(HttpServletResponse response) 
+    private void displayError(String error,HttpServletResponse response) 
             throws ServletException, IOException {
         
         try (PrintWriter out = response.getWriter()) {
@@ -179,7 +212,7 @@ public class Home extends HttpServlet {
             out.println("<title>Servlet Error</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h3> Request could not be satisfied. The Profile has not been update </h3>");
+            out.println("<h3>"+ error+ "  </h3>");
             out.println("</body>");
             out.println("</html>");
         
@@ -187,11 +220,11 @@ public class Home extends HttpServlet {
 
     }
     protected void getProfilePic(HttpServletRequest request, HttpServletResponse response){
-         User us=new User();
-            us.setCluster(cluster);
+  
             HttpSession session = request.getSession();
             String username=(String)session.getAttribute("user");
-            String picid=us.getProfilePhoto(username);
+            DbData db=new DbData();
+            String picid=db.getProfilePic(username);
             request.setAttribute("profilepic",picid);
             //System.out.println("Session in servlet "+session);
     }

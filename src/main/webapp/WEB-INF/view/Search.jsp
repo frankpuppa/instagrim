@@ -13,7 +13,7 @@
 <div class="container">
     <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
     <div class="row">
-        <form action="/Instagrim/Search" method="POST">
+        <form action="${pageContext.request.contextPath}/Search" method="POST">
             <h3 class=>Search User: </h3> <input type="text" name="fname">
 
             <input type="submit" value="Submit">
@@ -55,7 +55,7 @@
 
                             
                         <td>
-                            <form action="/Instagrim/Follow" method="POST">
+                            <form action="${pageContext.request.contextPath}/Follow" method="POST">
                                 <input type="hidden" name="userN" value="<%= array.get(i).get(0) %>">
                             <input type="submit" name="name" value="Follow">
                             </form>
@@ -77,10 +77,10 @@
     <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
                     <ul class="list-inline" >
-                        <li><a href="/Instagrim">Index</a></li>
-                        <li><a href="/Instagrim/Home">Home</a></li>
-                            <li><a href="/Instagrim/Upload">Upload</a></li>   
-                            <li><a href="/Instagrim/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
+                        <li><a href="${pageContext.request.contextPath}">Index</a></li>
+                        <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+                            <li><a href="${pageContext.request.contextPath}/Upload">Upload</a></li>   
+                            <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
                             <li><a href="Logout">Logout</a></li>
                     </ul>
     </div>

@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
 <!DOCTYPE html>
-<html>
+
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="../css/Styles.css" />
@@ -20,16 +20,16 @@
     </head>
     <header class="bgimage"></header>
     <body>
-        
         <div class="container">
             <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
             <div class="row">
-                <article>
+                
                     <h3>Your Pics</h3>
-                    
+                    <article>
                     <%
                         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
                         String username=(String)request.getSession().getAttribute("user");
+                        ArrayList<ArrayList<String>> comments = (ArrayList<ArrayList<String>>)request.getAttribute("Comments");
                         if (lsPics == null) {
                     %>
                     <p>No Pictures found</p>
@@ -38,8 +38,8 @@
                             int i=3;
                         Iterator<Pic> iterator;
                         iterator = lsPics.iterator();%>
-                        <div class="container-fluid">
-                        <table class="table">
+                        <div class="container">
+                        <table class="table" style="table-layout:fixed"  >
                             
                         <% while (iterator.hasNext()) {
                             Pic p = (Pic) iterator.next();
@@ -48,39 +48,67 @@
                     <tr>
                         <%}%>
                         
-                        <td><div class="container-fluid">
-                            <a href="/Instagrim/Image/<%=p.getSUUID()%>"><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a>
+                        <td> <!--<div class="container">-->
+                   
+                            <a href="${pageContext.request.contextPath}/Image/<%=p.getSUUID()%>"><img src="${pageContext.request.contextPath}/Thumb/<%=p.getSUUID()%>"></a>
                             <%if(p.getOwner().equals(username)){%>
-                            <form  action="/Instagrim/DeletePhoto" method="GET">
+                            <form  action="${pageContext.request.contextPath}/DeletePhoto" method="GET">
                                 <input  type="hidden" name="delete" value="<%=p.getSUUID()%>">
                                 <input  type="submit" name="name" value="Delete">
                             </form>
                             <%}%>
-                            <form  action="/Instagrim/SetProfile" method="GET">
+                            <form  action="${pageContext.request.contextPath}/SetProfile" method="GET">
                                 <input   type="hidden" name="setProfile" value="<%=p.getSUUID()%>">
                                 <input   type="submit" name="name" value="Set as Profile">
                             </form>
-                        </div></td><br/>
+                            <form  action="${pageContext.request.contextPath}/AddComment" method="GET">
+                                <input   type="text" name="comment" value="">
+                               <input    type="hidden" name="picid" value="<%=p.getSUUID()%>">
+                                <input   type="submit" name="name" value="Submit">
+                            </form>
+                            <!--<div class="container">-->
+                            <% if(comments !=null){
+                               for (int o=0; o<comments.size(); o++){
+                            if(comments.get(o).get(0).equals(p.getSUUID())){%>
+                            <table style="width:100%">
+                                <tr>
+                                    <td><span style="font-weight: bold"><%=comments.get(o).get(2)%> </span> 
+                                        <span style="text-align: right"><%=comments.get(o).get(3)%> </span>
+                                        <br/> 
+                                        <%=comments.get(o).get(1)%> </td>
+                                </tr>
+                            </table>                              
+                            
+                               <%}%>    
+                            <%}%>
+                            <%}%>
+
+                            <!--</div>-->
+                            
+                        <!--</div>-->
+                </td><br/>
                         
                     <%i--;
                     if(i==0){%>
                         </tr>
                     <% i=3; }
-                    }
-                }
+                    }%>
+                    </table>
+                     </div>
+                <%}
                         %>
-                        </table>
+                        </article>
                         </div>
-                </article>
-            </div>
+                
+            
 
 
-        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
+         <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
             <ul class="list-inline" >
-                <li><a href="/Instagrim/Home">Home</a></li>
-                <li><a href="/Instagrim/Upload">Upload</a></li>   
-                <li><a href="/Instagrim/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
+                <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/Upload">Upload</a></li>   
+                <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
 
             </ul>
         </div>  
@@ -91,4 +119,3 @@
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../js/bootstrap.js"></script>
 <script src="../js/myscript.js"></script>
-</html>

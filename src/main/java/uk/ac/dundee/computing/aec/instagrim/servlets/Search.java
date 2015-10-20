@@ -49,6 +49,7 @@ public class Search extends HttpServlet {
             throws ServletException, IOException {
     
     HttpSession session = request.getSession();
+    String username=(String)session.getAttribute("user");
      //   LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
         RequestDispatcher rd;
 //        String action = request.getParameter("act");
@@ -58,8 +59,9 @@ public class Search extends HttpServlet {
 //           response.setContentType("text/html");
            String user = request.getParameter("fname");
            if(user!=null && !user.equals("")){
-               
+               if(!user.equals(username)){
                searchUser(request, response ,user);
+               }
            }
          
           // Set standard HTTP/1.1 no-cache headers.

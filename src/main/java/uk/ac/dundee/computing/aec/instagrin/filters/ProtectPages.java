@@ -118,8 +118,11 @@ public class ProtectPages implements Filter {
         System.out.println("Session in filter "+session);
         if ((li == null)  || (li.getlogedin()==false)){
                System.out.println("Foward to login");
-                RequestDispatcher rd=request.getRequestDispatcher("/");
+               //String path=request.getContextPath();
+                RequestDispatcher rd=request.getRequestDispatcher("/Login");
 		rd.forward(request,response);
+               //String path=request.getContextPath();
+               //response.sendRedirect(path + "/Login");
                 
             
         }

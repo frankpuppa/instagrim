@@ -13,13 +13,15 @@
       var center= (wWidth/2) - (barwidth/2); //some math to center the bar
     //  var sidebar=windowheight-280; //header +footer
       var containerHomeHeight=$("#AA").height();
-    //  console.log("DIV "+ containerHomeHeight);
+
+
+//  console.log("DIV "+ containerHomeHeight);
     //console.log("sidebar"+sidebar);
 //console.log("bodyheight" + bodyheight);
-//console.log("windowheight"+windowheight);
+//console.log("windowheight"+windowheight)
 //     console.log("barwidth " + barwidth);
-//     console.log("bodywidth " + wWidth +"px");
-//     console.log("center " + center +"px");
+//   console.log("bodywidth " + wWidth +"px");
+//    console.log("center " + center +"px");
 //          $("#sidebar-wrapper").css("height", (sidebar+"px"));
 
 /*      SET DIV CONTAINER HEIGHT    */

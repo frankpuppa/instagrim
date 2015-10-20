@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
@@ -28,6 +30,7 @@ import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
+import uk.ac.dundee.computing.aec.instagrim.models.Comment;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -41,7 +44,8 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
     "/Images",
     "/Images/*",
     "/DeletePhoto",
-    "/SetProfile"
+    "/SetProfile",
+    "/AddComment"
 })
 @MultipartConfig
 
@@ -64,6 +68,7 @@ public class Image extends HttpServlet {
         CommandsMap.put("Thumb", 3);
         CommandsMap.put("DeletePhoto",4);
         CommandsMap.put("SetProfile", 5);
+        CommandsMap.put("AddComment",6);
 
     }
 
@@ -103,6 +108,9 @@ public class Image extends HttpServlet {
             case 5:
                     updateProfilePic(request,response);
                 break;
+            case 6:
+                    addComment(request,response);
+                break;
             default:
                 error("Bad Operator", response);
         }
@@ -124,11 +132,24 @@ public class Image extends HttpServlet {
         if(followedUsers!=null) {
         for (String user : followedUsers){
            lsPics= tm.getPicsForUser(user, lsPics); 
+            }
         }
-        }
+        Comment cm=new Comment();
+        cm.setCluster(cluster);
         
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/UsersPics.jsp");
+        if(lsPics !=null){
+        Iterator<Pic> iterator=lsPics.iterator();
+        ArrayList<ArrayList<String>> comments=new ArrayList<>();
+       
+        while (iterator.hasNext()) {
+        Pic p = (Pic) iterator.next();
+                comments=cm.getComments(comments, p.getSUUID());
+        }
+
         request.setAttribute("Pics", lsPics);
+        request.setAttribute("Comments",comments );
+        }
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/UsersPics.jsp");
         rd.forward(request, response);
 
     }
@@ -160,6 +181,7 @@ public class Image extends HttpServlet {
 
             String type = part.getContentType();
             String filename = part.getSubmittedFileName();
+            String path=request.getContextPath();
             
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
@@ -179,7 +201,7 @@ public class Image extends HttpServlet {
 
                 is.close();
             }
-            response.sendRedirect("/Instagrim/Images/" + username);
+            response.sendRedirect(path +"/Images/" + username);
            // RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/upload.jsp");
            //  rd.forward(request, response);
         }
@@ -197,12 +219,13 @@ public class Image extends HttpServlet {
     }
     protected void deletePhoto(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         HttpSession session = request.getSession();
+        String path=request.getContextPath();
         String username=(String)session.getAttribute("user");
         String picid = (String)request.getParameter("delete");
         PicModel pm=new PicModel();
             pm.setCluster(cluster);
           if (pm.deletePhoto(picid, username)) {
-            response.sendRedirect("/Instagrim/Images/" + username);
+            response.sendRedirect(path + "/Images/" + username);
         } else {
            error("Photo Could not be deleted", response);
         }
@@ -211,15 +234,31 @@ public class Image extends HttpServlet {
     }
     protected void updateProfilePic(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         HttpSession session = request.getSession();
+        String path=request.getContextPath();
         String username=(String)session.getAttribute("user");
         String picid = (String)request.getParameter("setProfile");
         
         User us=new User();
         us.setCluster(cluster);
         if(us.setProfilePhoto(picid, username)){
-	response.sendRedirect("/Instagrim/Home");
+	response.sendRedirect(path + "/Home");
         }else{
             error("Profile Picture could not be set", response);
+        } 
+    }
+    protected void addComment(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String path=request.getContextPath();
+        String username=(String)session.getAttribute("user");
+        String picid = (String)request.getParameter("picid");
+        String comment =(String)request.getParameter("comment");
+        
+        Comment cm=new Comment();
+        cm.setCluster(cluster);
+        if(cm.addComment(picid,comment,username)){
+	response.sendRedirect(path + "/Images/" + username);
+        }else{
+            error("Profile Comment could not be added", response);
         } 
     }
 }

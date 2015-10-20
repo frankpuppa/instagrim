@@ -46,7 +46,7 @@ public class User {
         String EncodedPassword=getEncodedPassword(password);
         if(EncodedPassword==null)
             return false;
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("insert into userprofiles (login,password,first_name,last_name,email,addresses) Values(?,?,?,?,?,?)");
        
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -67,7 +67,7 @@ public class User {
             System.out.println("Can't check your password");
             return false;
         }
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("select password from userprofiles where login =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -93,8 +93,8 @@ public class User {
     }
        public ArrayList<String> getUserDetails(String username){
         ArrayList<String> values=new ArrayList<>();
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select login, addresses, email, first_name, last_name FROM userprofiles WHERE login=?");
+        Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("select login, addresses, email, first_name, last_name,about FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -110,6 +110,7 @@ public class User {
                values.add(2, row.getString("email"));
                values.add(3, row.getString("first_name"));
                values.add(4, row.getString("last_name"));
+               values.add(5, row.getString("about"));
 //               Set<String> m=row.getSet("follow",  String.class);
 //               int j=5;
 //                for (String g : m){
@@ -124,7 +125,7 @@ public class User {
        public Set<String> getFollowedUsers(String username){
        //ArrayList<String> users=new ArrayList<>();
         Set<String> users = null;
-           Session session = cluster.connect("instagrim");
+           Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("select follow FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -150,7 +151,7 @@ public class User {
         
            ArrayList<ArrayList<String>> users= new ArrayList<>();
         
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("select login, first_name, last_name, email FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -182,7 +183,7 @@ public class User {
        public boolean followUser(String userN,String username){
            Set<String> follow=new HashSet<>();
            follow.add(userN);
-           Session session = cluster.connect("instagrim");
+           Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("UPDATE userprofiles SET follow = follow + ? WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -203,7 +204,7 @@ public class User {
        public boolean unfollowUser(String followeduser, String username){ 
             Set<String> follow=new HashSet<>();
            follow.add(followeduser);
-           Session session = cluster.connect("instagrim");
+           Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("UPDATE userprofiles SET follow = follow - ? where login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -220,20 +221,20 @@ public class User {
             return false;
         }
        }
-       public boolean updateProfile(String username, String password, String first_name, String last_name, String email, String address){
+       public boolean updateProfile(String username, String password, String first_name, String last_name, String email, String address,String about){
         String EncodedPassword;
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         
         if(password!=null){
             EncodedPassword=getEncodedPassword(password);
                 if(EncodedPassword==null){
                     return false;
                 }
-            PreparedStatement ps = session.prepare("update userprofiles SET password=?, first_name=?, last_name=?,email=?,addresses=? where login=?");
+            PreparedStatement ps = session.prepare("update userprofiles SET password=?, first_name=?, last_name=?,email=?,addresses=?,about=? where login=?");
             BoundStatement boundStatement = new BoundStatement(ps);
             session.execute( // this is where the query is executed
             boundStatement.bind( // here you are binding the 'boundStatement'
-                        EncodedPassword,first_name,last_name,email,address,username));
+                        EncodedPassword,first_name,last_name,email,address,about,username));
         //We are assuming this always works.  Also a transaction would be good here !
         
         
@@ -250,7 +251,7 @@ public class User {
        
        public boolean setProfilePhoto(String picid, String username){
         
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("UPDATE userprofiles SET profilepic = ? where login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -265,7 +266,7 @@ public class User {
        }
        public String getProfilePhoto(String username){
            String picid=null;
-           Session session = cluster.connect("instagrim");
+           Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("select profilepic FROM userprofiles WHERE login=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -280,6 +281,26 @@ public class User {
                 picid=row.getString("profilepic");
             }
             return picid;
+        }
+       
+       }
+       public String getAbout(String username){
+           String about=null;
+           Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("select about FROM userprofiles WHERE login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+                about=row.getString("about");
+            }
+            return about;
         }
        
        }

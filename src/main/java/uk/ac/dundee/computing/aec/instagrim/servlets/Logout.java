@@ -34,11 +34,12 @@ public class Logout extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //RequestDispatcher rd=request.getRequestDispatcher("/");
+        String path=request.getContextPath();
             HttpSession session=request.getSession(false);
             
             session.invalidate();
             //rd.forward(request,response);
-            response.sendRedirect("/Instagrim/");
+            response.sendRedirect(path);
         }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

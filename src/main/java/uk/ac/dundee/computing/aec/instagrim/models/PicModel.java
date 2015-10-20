@@ -12,6 +12,7 @@ package uk.ac.dundee.computing.aec.instagrim.models;
  * To manually generate a UUID use:
  * http://www.famkruithof.net/uuid/uuidgen
  */
+import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
@@ -35,7 +36,6 @@ import javax.imageio.ImageIO;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
 
-import uk.ac.dundee.computing.aec.instagrim.lib.*;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 //import uk.ac.dundee.computing.aec.stores.TweetStore;
 
@@ -61,8 +61,8 @@ public class PicModel {
             java.util.UUID picid = convertor.getTimeUUID();
             
             //The following is a quick and dirty way of doing this, will fill the disk quickly !
-            Boolean success = (new File("/var/tmp/instagrim/")).mkdirs();
-            FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/" + picid));
+            Boolean success = (new File("/var/tmp/instafrank/")).mkdirs();
+            FileOutputStream output = new FileOutputStream(new File("/var/tmp/instafrank/" + picid));
 
             output.write(b);
             byte []  thumbb = picresize(picid.toString(),types[1]);
@@ -71,7 +71,7 @@ public class PicModel {
             byte[] processedb = picdecolour(picid.toString(),types[1]);
             ByteBuffer processedbuf=ByteBuffer.wrap(processedb);
             int processedlength=processedb.length;
-            Session session = cluster.connect("instagrim");
+            Session session = cluster.connect("instafrank");
 
             PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertPicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
@@ -90,7 +90,7 @@ public class PicModel {
 
     public byte[] picresize(String picid,String type) {
         try {
-            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
+            BufferedImage BI = ImageIO.read(new File("/var/tmp/instafrank/" + picid));
             BufferedImage thumbnail = createThumbnail(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(thumbnail, type, baos);
@@ -107,7 +107,7 @@ public class PicModel {
     
     public byte[] picdecolour(String picid,String type) {
         try {
-            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
+            BufferedImage BI = ImageIO.read(new File("/var/tmp/instafrank/" + picid));
             BufferedImage processed = createProcessed(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(processed, type, baos);
@@ -135,7 +135,7 @@ public class PicModel {
    
     public LinkedList<Pic> getPicsForUser(String User, LinkedList<Pic> Pics) {
        // LinkedList<Pic> Pics = new LinkedList<>();
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -160,7 +160,7 @@ public class PicModel {
     }
 
     public Pic getPic(int image_type, java.util.UUID picid) {
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         ByteBuffer bImage = null;
         String type = null;
         int length = 0;
@@ -216,7 +216,7 @@ public class PicModel {
     }
     protected Date getPicAdded(UUID id){
         Date picdate = new Date();
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("select interaction_time from pics where picid=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -237,7 +237,7 @@ public class PicModel {
     public boolean deletePhoto(String picid, String username){
         UUID id= UUID.fromString(picid);
         Date pic_added = getPicAdded(id);
-        Session session = cluster.connect("instagrim");
+        Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("delete from userpiclist where user = ? and  pic_added= ?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -255,7 +255,7 @@ public class PicModel {
 //        Pic pic=
 //        UUID id= UUID.fromString(picid);
 //        Date pic_added = getPicAdded(id);
-//        Session session = cluster.connect("instagrim");
+//        Session session = cluster.connect("instafrank");
 //        PreparedStatement ps = session.prepare("delete from userpiclist where user = ? and  pic_added= ?");
 //        ResultSet rs = null;
 //        BoundStatement boundStatement = new BoundStatement(ps);

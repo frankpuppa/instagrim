@@ -90,6 +90,7 @@ public class Unfollow extends HttpServlet {
     
     protected void unFollow(HttpServletRequest request, HttpServletResponse response,String userfollowed)
             throws ServletException, IOException {
+        String path=request.getContextPath();
              User us=new User();
             us.setCluster(cluster);
             HttpSession session = request.getSession();
@@ -97,7 +98,7 @@ public class Unfollow extends HttpServlet {
             boolean test=us.unfollowUser(userfollowed,username);
             if(test){
                  //ystem.out.println("OK USER ADDED");
-                 response.sendRedirect("/Instagrim/Home");
+                 response.sendRedirect(path + "Home");
              }else{
                  displayError(response,userfollowed);
              }

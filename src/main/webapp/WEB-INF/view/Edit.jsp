@@ -40,11 +40,15 @@
                     <textarea rows="2" cols="20" name="address" maxlength="100" class="form-control" style="resize:vertical"><%=array.get(1)%></textarea>
                 </div>
                 <div class="form-group">
+                    <label for="address"> About: </label>  
+                    <textarea rows="2" cols="20" name="about" class="form-control" style="resize:vertical"><%=array.get(5)%></textarea>
+                </div>
+                <div class="form-group">
                     <label for="Password"> Password: </label>  
                     <input type="password" name="password" size="20" class="form-control">
                 </div>
 
-                <button type="submit" class="btn btn-default">Edit Values</button>
+                <button type="submit" value="edit" class="btn btn-default">Edit Values</button>
             </form>
         </div>
     </div>
@@ -52,9 +56,9 @@
     <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
 
         <ul class="list-inline" >
-            <li><a href="/Instagrim">Index</a></li>
-            <li><a href="/Instagrim/Upload">Upload</a></li>   
-            <li><a href="/Instagrim/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
+            <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+            <li><a href="${pageContext.request.contextPath}/Upload">Upload</a></li>   
+            <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
             <li><a href="Logout">Logout</a></li>
         </ul>
     </div>

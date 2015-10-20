@@ -50,6 +50,7 @@ public class Login extends HttpServlet {
         
         String username=request.getParameter("username");
         String password=request.getParameter("password");
+        String path=request.getContextPath();
         
         User us=new User();
         us.setCluster(cluster);
@@ -68,9 +69,9 @@ public class Login extends HttpServlet {
             
             //RequestDispatcher rd=request.getRequestDispatcher("/Home");
 	    //rd.forward(request,response);
-            response.sendRedirect("/Instagrim/Home");
+            response.sendRedirect(path + "/Home");
         }else{
-            response.sendRedirect("/Instagrim/Login");
+            response.sendRedirect(path + "/Login");
         }
         
     }
@@ -84,7 +85,7 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        // response.sendRedirect("/views/login.jsp");
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/login.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/Login.jsp");
         rd.forward(request, response);
     }
     
