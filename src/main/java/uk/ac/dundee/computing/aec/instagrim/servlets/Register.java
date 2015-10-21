@@ -71,7 +71,7 @@ public class Register extends HttpServlet {
         //us.RegisterUser(username, password, first_name, last_name, email, address);
         us.RegisterUser(values[0],values[1],values[2],values[3],values[4],values[5]);
         String path=request.getContextPath();
-	response.sendRedirect(path);
+	response.sendRedirect(path + "/Login");
         
     }
     

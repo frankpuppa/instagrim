@@ -130,9 +130,13 @@ public class Home extends HttpServlet {
         String value=request.getParameter("submit");
         switch (value) {
             case "about":
+                updateAbout(request, response);
                 break;
             case "edit":
                 updateProfile(request,response);
+                break;
+            default:
+                displayError("Values cannot be updated!!",response);
                 break;
         }
     }
@@ -200,6 +204,28 @@ public class Home extends HttpServlet {
 	response.sendRedirect(path);
         }else{
             displayError("Profile Could not be update! Sorry...",response);
+        }
+    }
+    protected void updateAbout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        String username=(String)session.getAttribute("user");
+        
+        String path=request.getContextPath();
+        String about=request.getParameter("about");
+	///To finish update About
+        // Fix Register
+        //Check for wildchar
+        // Check for errors
+        
+        User us=new User();
+        us.setCluster(cluster);
+        //us.RegisterUser(username, password, first_name, last_name, email, address);
+        if(us.setAbout(username, about)){
+	response.sendRedirect(path + "/Home");
+        }else{
+            displayError("About could not be updated! Sorry...",response);
         }
     }
     private void displayError(String error,HttpServletResponse response) 

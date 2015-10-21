@@ -304,4 +304,22 @@ public class User {
         }
        
        }
+        public boolean setAbout(String username, String about){
+           
+           Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("update userprofiles SET about=? where login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        about,username));
+        if (rs.isExhausted()) {
+            System.out.println("About set");
+            return true;
+        } else {
+          
+            return false;
+        }
+       
+       }
 }   

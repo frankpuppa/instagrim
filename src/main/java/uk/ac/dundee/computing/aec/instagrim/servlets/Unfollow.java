@@ -98,7 +98,7 @@ public class Unfollow extends HttpServlet {
             boolean test=us.unfollowUser(userfollowed,username);
             if(test){
                  //ystem.out.println("OK USER ADDED");
-                 response.sendRedirect(path + "Home");
+                 response.sendRedirect(path + "/Home");
              }else{
                  displayError(response,userfollowed);
              }

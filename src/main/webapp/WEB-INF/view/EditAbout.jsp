@@ -17,7 +17,7 @@
         <div class="jumbotron">
 
             <h3>Edit About</h3>
-            <form method="POST"  action="Home">            
+            <form method="POST"  action="">            
               
                 <div class="form-group">
                     <label for="address"> About: </label>  
@@ -25,7 +25,7 @@
                 </div>
                 
 
-                <button type="submit" value="about" class="btn btn-default">Submit</button>
+                <button type="submit" name="submit" value="about" class="btn btn-default">Submit</button>
             </form>
         </div>
     </div>
