@@ -7,6 +7,7 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
 
 import com.datastax.driver.core.utils.Bytes;
 import java.nio.ByteBuffer;
+import java.util.Date;
 
 /**
  *
@@ -19,6 +20,7 @@ public class Pic {
     private String type;
     private java.util.UUID UUID=null;
     private String owner;
+    private Date date;
     
     public void Pic() {
 
@@ -59,5 +61,12 @@ public class Pic {
     
     public void setOwner(String newOwner){
         owner=newOwner;
+    }
+    
+    public void setDate(Date time){
+        date=time;
+    }
+    public Date getDate (){
+        return date;
     }
 }

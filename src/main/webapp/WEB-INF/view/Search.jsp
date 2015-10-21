@@ -34,7 +34,9 @@
                     <td>First Name</td>
                     <td>Last Name</td>
                     <td>Email</td>
-                    <td>Follow</td>
+                    <td>Following</td>
+                    <td>Add Follow</td>
+                    <td>About</td>
                 </tr>
                 <% if (array != null) {
                         for (int i = 0; i < array.size(); i++) {%>
@@ -46,7 +48,7 @@
                    <% if(followedUsers!=null) {%>
                    <td><select>
                         <%for (String s : followedUsers){%>%>  
-                            <option disabled="disabled"><%=s %></option>
+                            <option value="<%=s %>" ><%=s %></option>
                                   
                     <%}%>
                        </select></td>
@@ -59,9 +61,11 @@
                                 <input type="hidden" name="userN" value="<%= array.get(i).get(0) %>">
                             <input type="submit" name="name" value="Follow">
                             </form>
-                    
+                        </td>
+                        <td><a href="${pageContext.request.contextPath}/About/<%=array.get(i).get(0)%>"><%=array.get(i).get(0)%>'s Page</a></td>
                      <%}%>
                      <%}%>
+                        
             </table>
             
         </div>

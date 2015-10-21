@@ -62,6 +62,13 @@ public final class Keyspaces {
                     + "     date      timestamp, \n"
                     + "     PRIMARY KEY(commentid,picid)\n"
                     + ");";
+            String CreateGuestBookTable="CREATE TABLE if not exists instafrank.guestbook (\n"
+                    + "bookid uuid,\n"
+                    + "owner varchar,\n"
+                    + "user  varchar,\n"
+                    + "comment_added timestamp,\n"
+                    + "PRIMARY KEY (user,comment_added)\n"
+                    + "  );";
             Session session = c.connect();
             try {
                 PreparedStatement statement = session
@@ -111,6 +118,12 @@ public final class Keyspaces {
                 session.execute(cqlQuery);
             } catch (Exception et) {
                 System.out.println("Can't create Comment Table " + et);
+            }
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreateGuestBookTable);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create Guestbook Table " + et);
             }
             
             session.close();

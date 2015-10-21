@@ -136,7 +136,7 @@ public class PicModel {
     public LinkedList<Pic> getPicsForUser(String User, LinkedList<Pic> Pics) {
        // LinkedList<Pic> Pics = new LinkedList<>();
         Session session = cluster.connect("instafrank");
-        PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
+        PreparedStatement ps = session.prepare("select picid,pic_added from userpiclist where user =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -149,6 +149,7 @@ public class PicModel {
             for (Row row : rs) {
                 Pic pic = new Pic();
                 pic.setOwner(User);
+                pic.setDate(row.getDate("pic_added"));
                 java.util.UUID UUID = row.getUUID("picid");
                 System.out.println("UUID" + UUID.toString());
                 pic.setUUID(UUID);

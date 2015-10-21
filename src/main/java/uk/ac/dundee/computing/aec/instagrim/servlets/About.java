@@ -23,7 +23,7 @@ import uk.ac.dundee.computing.aec.instagrim.lib.DbData;
  */
 @WebServlet(name = "About", urlPatterns = {
     "/About",
-    "/About/*"
+    "/About/*",
 })
 public class About extends HttpServlet {
 

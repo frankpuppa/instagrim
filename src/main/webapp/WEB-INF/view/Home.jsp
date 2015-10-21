@@ -63,24 +63,29 @@
                         <tr>
                             <td>User Name</td>
                             <td><%=array.get(0)%> </td>
+                             <td></td>
                         </tr>
                         <tr>
                             <td>First Name</td>
                             <td><%=array.get(3)%> </td>
+                             <td></td>
                         </tr>
                         <tr>
                             <td>Last Name</td>
                             <td><%=array.get(4)%> </td>
+                             <td></td>
                         </tr>
 
                         <tr>
                             <td>Email</td>
                             <td><%=array.get(2)%> </td>
+                             <td></td>
                         </tr>
 
                         <tr>
                             <td>Address</td>
                             <td><%=array.get(1)%> </td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>About</td>
@@ -102,7 +107,7 @@
                                     <input type="submit" name="name" value="Unfollow">
                                 </form>
                             </td>
-
+                                 <td></td>
                         </tr>
                         <%}%>
                     </table>

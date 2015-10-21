@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import static java.util.Collections.list;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -145,7 +148,26 @@ public class Image extends HttpServlet {
         Pic p = (Pic) iterator.next();
                 comments=cm.getComments(comments, p.getSUUID());
         }
-
+        
+        //Sort linked list
+    
+        
+    //Found part of this online. Then modified to suit my needs
+    Collections.sort(lsPics, new Comparator<Pic>() {
+        @Override
+        public int compare(Pic m1, Pic m2) {
+            if(m1.getDate().compareTo(m2.getDate()) <1){
+                return 1;
+            }else if(m1.getDate().compareTo(m2.getDate()) ==0){
+                return 0;
+            }else{
+                return -1;
+            }
+           
+     }
+    });
+        
+        
         request.setAttribute("Pics", lsPics);
         request.setAttribute("Comments",comments );
         }
@@ -259,6 +281,7 @@ public class Image extends HttpServlet {
 	response.sendRedirect(path + "/Images/" + username);
         }else{
             error("Profile Comment could not be added", response);
-        } 
+        }
+      
     }
 }

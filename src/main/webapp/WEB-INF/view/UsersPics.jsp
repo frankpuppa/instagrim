@@ -24,8 +24,11 @@
             <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
             <div class="row">
                 
-                    <h3>Your Pics</h3>
-                    <article>
+                
+            <div class="col-lg-12">
+                <h1 class="page-header">The Gallery</h1>
+            </div>
+                 
                     <%
                         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
                         String username=(String)request.getSession().getAttribute("user");
@@ -38,18 +41,16 @@
                             int i=3;
                         Iterator<Pic> iterator;
                         iterator = lsPics.iterator();%>
-                        <div class="container">
-                        <table class="table" style="table-layout:fixed"  >
+                       
+                        <!--<table class="table" style="table-layout:fixed"  >-->
                             
                         <% while (iterator.hasNext()) {
                             Pic p = (Pic) iterator.next();
-                            if((i % 3)==0){
+                           
                     %>
-                    <tr>
-                        <%}%>
-                        
-                        <td> <!--<div class="container">-->
-                   
+                  
+                        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                            <%=p.getOwner()%> <br/>   
                             <a href="${pageContext.request.contextPath}/Image/<%=p.getSUUID()%>"><img src="${pageContext.request.contextPath}/Thumb/<%=p.getSUUID()%>"></a>
                             <%if(p.getOwner().equals(username)){%>
                             <form  action="${pageContext.request.contextPath}/DeletePhoto" method="GET">
@@ -70,36 +71,21 @@
                             <% if(comments !=null){
                                for (int o=0; o<comments.size(); o++){
                             if(comments.get(o).get(0).equals(p.getSUUID())){%>
-                            <table style="width:100%">
-                                <tr>
-                                    <td><span style="font-weight: bold"><%=comments.get(o).get(2)%> </span> 
+                            <!--<table style="width:100%">-->
+                                <!--<tr>-->
+                                    <span style="font-weight: bold"><%=comments.get(o).get(2)%> </span> 
                                         <span style="text-align: right"><%=comments.get(o).get(3)%> </span>
                                         <br/> 
-                                        <%=comments.get(o).get(1)%> </td>
-                                </tr>
-                            </table>                              
-                            
+                                        <%=comments.get(o).get(1)%> <br/>
+                       
                                <%}%>    
                             <%}%>
                             <%}%>
-
-                            <!--</div>-->
-                            
-                        <!--</div>-->
-                </td><br/>
                         
-                    <%i--;
-                    if(i==0){%>
-                        </tr>
-                    <% i=3; }
-                    }%>
-                    </table>
-                     </div>
-                <%}
-                        %>
-                        </article>
                         </div>
-                
+                            <%}%>
+                             <%}%>
+            </div>
             
 
 
