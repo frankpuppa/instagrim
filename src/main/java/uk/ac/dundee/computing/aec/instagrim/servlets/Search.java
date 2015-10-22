@@ -126,8 +126,14 @@ public class Search extends HttpServlet {
             us.setCluster(cluster);
             //HttpSession session = request.getSession();
             //String username=(String)session.getAttribute("user");
+            ArrayList<Set<String>> followedUsers=new ArrayList<>();
+           
             ArrayList<ArrayList<String>> users=us.searchUser(username);
-            Set<String>followedUsers=us.getFollowedUsers(username);
+            
+            for(int i=0; i<users.size(); i++ ){
+                followedUsers.add(us.getFollowedUsers(users.get(i).get(0)));
+            }
+            
             //System.out.println("Value array " +values[0]);
              request.setAttribute("usersV", users);
              request.setAttribute("followedUsers", followedUsers);

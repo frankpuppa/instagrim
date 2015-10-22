@@ -134,7 +134,7 @@ public class PicModel {
     }
    
     public LinkedList<Pic> getPicsForUser(String User, LinkedList<Pic> Pics) {
-       // LinkedList<Pic> Pics = new LinkedList<>();
+        LinkedList<Pic> P = new LinkedList<>();
         Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("select picid,pic_added from userpiclist where user =?");
         ResultSet rs = null;
@@ -144,8 +144,13 @@ public class PicModel {
                         User));
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
-            return null;
+            return Pics;           
         } else {
+            //Prevent crashes in linked list
+            if(Pics==null){
+                Pics=P;}else {
+                P=Pics;
+            }
             for (Row row : rs) {
                 Pic pic = new Pic();
                 pic.setOwner(User);
@@ -153,7 +158,7 @@ public class PicModel {
                 java.util.UUID UUID = row.getUUID("picid");
                 System.out.println("UUID" + UUID.toString());
                 pic.setUUID(UUID);
-                Pics.add(pic);
+                P.add(pic);
 
             }
         }
@@ -245,12 +250,7 @@ public class PicModel {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username, pic_added));
-        if (rs.isExhausted()) {
-            System.out.println("No Images returned");
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 //    public Pic getProfilePic(String picid){
 //        Pic pic=

@@ -129,10 +129,12 @@ public class Image extends HttpServlet {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         
-        LinkedList<Pic> lsPics=new LinkedList<>();
+        LinkedList<Pic> lsPics=null;
         lsPics= tm.getPicsForUser(User, lsPics);
         
         if(followedUsers!=null) {
+//            if(lsPics==null)
+//                lsPics=new LinkedList<>();
         for (String user : followedUsers){
            lsPics= tm.getPicsForUser(user, lsPics); 
             }

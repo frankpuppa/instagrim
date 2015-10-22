@@ -64,11 +64,12 @@ public final class Keyspaces {
                     + ");";
             String CreateGuestBookTable="CREATE TABLE if not exists instafrank.guestbook (\n"
                     + "bookid uuid,\n"
-                    + "owner varchar,\n"
+                    + "message varchar,\n"
+                    + "user_owner varchar,\n"
                     + "user  varchar,\n"
-                    + "comment_added timestamp,\n"
-                    + "PRIMARY KEY (user,comment_added)\n"
-                    + "  );";
+                    + "date timestamp,\n"
+                    + "PRIMARY KEY (user_owner,date)\n"
+                    + ") WITH CLUSTERING ORDER BY (date desc);";
             Session session = c.connect();
             try {
                 PreparedStatement statement = session

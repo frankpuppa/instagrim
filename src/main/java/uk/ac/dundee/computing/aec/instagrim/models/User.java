@@ -42,21 +42,39 @@ public class User {
         return EncodedPassword;
        }
     
-    public boolean RegisterUser(String username, String password, String first_name, String last_name, String email, String address){
+    public boolean RegisterUser(String username, String password, String first_name, String last_name, String email, String address, String about){
         String EncodedPassword=getEncodedPassword(password);
         if(EncodedPassword==null)
             return false;
         Session session = cluster.connect("instafrank");
-        PreparedStatement ps = session.prepare("insert into userprofiles (login,password,first_name,last_name,email,addresses) Values(?,?,?,?,?,?)");
+        PreparedStatement ps = session.prepare("insert into userprofiles (login,password,first_name,last_name,email,addresses,about) Values(?,?,?,?,?,?,?)");
        
         BoundStatement boundStatement = new BoundStatement(ps);
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        username,EncodedPassword,first_name,last_name,email,address));
+                        username,EncodedPassword,first_name,last_name,email,address,about));
         //We are assuming this always works.  Also a transaction would be good here !
         
         return true;
     }
+    
+    public boolean checkUserExist(String username){
+       
+        Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("select login from userprofiles where login=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs=session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        if (rs.isExhausted()) {
+            System.out.println("User does not exist");
+            return false;
+        } 
+        //If another user has the same name it should be not allowed to register.
+        return true;  
+    }
+    
     
     public boolean IsValidUser(String username, String Password){
         AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
@@ -151,13 +169,24 @@ public class User {
         
            ArrayList<ArrayList<String>> users= new ArrayList<>();
         
+           ResultSet rs = null;
+           PreparedStatement ps;
         Session session = cluster.connect("instafrank");
-        PreparedStatement ps = session.prepare("select login, first_name, last_name, email FROM userprofiles WHERE login=?");
-        ResultSet rs = null;
+        if(username.equals("*")){
+             ps= session.prepare("select * FROM userprofiles");
+        
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        ));
+        }else{
+        ps = session.prepare("select login, first_name, last_name, email FROM userprofiles WHERE login=?");
+        
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username));
+        }
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return null;
@@ -168,12 +197,6 @@ public class User {
                x.add(1,row.getString("first_name"));
                x.add(2,row.getString("last_name"));       
                x.add(3,row.getString("email"));
-//               Set<String> m=row.getSet("follow",  String.class);
-//               int j=4;
-//                for (String g : m){
-//                x.add(j,g);
-//                j++;
-//                        }
                users.add(x);
             }
             return users;
@@ -190,15 +213,7 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         follow,username));
-        if (rs.isExhausted()) {
-            System.out.println("User Addedd to Follow");
-            return true;
-        } else {
-//            for (Row row : rs) {
-//               //follow.add(row.getString(""));
-//            }
-            return true;
-        }
+        return true;
        }
        
        public boolean unfollowUser(String followeduser, String username){ 
@@ -211,15 +226,7 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         follow,username));
-        if (rs.isExhausted()) {
-            System.out.println("No Images returned");
-            return true;
-        } else {
-//            for (Row row : rs) {
-//               
-//            }
-            return false;
-        }
+        return true;
        }
        public boolean updateProfile(String username, String password, String first_name, String last_name, String email, String address,String about){
         String EncodedPassword;
@@ -258,11 +265,8 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         picid,username));
-        if (rs.isExhausted()) {
-            System.out.println("No Images returned");
-            return true;
-        } 
-        return false;
+        
+        return true;
        }
        public String getProfilePhoto(String username){
            String picid=null;
@@ -313,13 +317,6 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         about,username));
-        if (rs.isExhausted()) {
-            System.out.println("About set");
-            return true;
-        } else {
-          
-            return false;
-        }
-       
+        return true;  
        }
 }   

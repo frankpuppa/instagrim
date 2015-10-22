@@ -17,7 +17,8 @@
     <body>
         <% String uservisited = (String)request.getAttribute("uservisited");
            String picid = (String) request.getAttribute("profilepic");
-           String about =(String) request.getAttribute("about");%>
+           String about =(String) request.getAttribute("about");
+           ArrayList<ArrayList<String>> guestbook = (ArrayList<ArrayList<String>>) request.getAttribute("guestbook");%>
 
         <div class="container">
             <h1>INSTAgrim ! </h1> <h2 class="text-center"><%=uservisited%>'s world in Black and White</h2>
@@ -35,6 +36,38 @@
                             </div>
                             <p><%=about%></p>
                         </div>
+                    <br/>
+                               <br/>
+                        <div class="container" >
+                             
+                            <div class="jumbotron">
+                            <h3>Leave a message on <%=uservisited%>'s Guestbook</h3>
+                            <form method="POST"  action=""> 
+                            <div class="form-group">
+                             <label for="guestbook"> Leave a Comment: </label>  
+                          <textarea rows="1" cols="40" name="guestbook" class="form-control" style="resize:vertical"></textarea>
+                          </div>
+                                <button type="submit" name="submit" value="guestbook" class="btn btn-default">Submit</button>
+                            </form>
+                            </div>
+ 
+                  
+                             <div class="panel panel-default">
+                            <% if(guestbook!=null){
+                                 for (int i = 0; i < guestbook.size(); i++) {%>
+                                 <div class="panel-heading"> 
+                                     <p>Left by: <span style="font-weight: bold"><%=guestbook.get(i).get(0)%></span>&nbsp; 
+                                         <span style="text-align: right"><%=guestbook.get(i).get(2)%></span></p>
+                               
+                                 </div>
+                                 <table class="table">
+
+                                     <tr><td><p><%=guestbook.get(i).get(1)%></p><td><tr>
+                                 </table>
+                            <%} 
+                            }%>
+                            </div>
+                                   </div>
                     </div>
                 </div>
             </div>

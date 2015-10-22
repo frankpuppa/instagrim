@@ -79,19 +79,66 @@ public class Comment {
         
         Session session = cluster.connect("instafrank");
         PreparedStatement ps = session.prepare("insert into comment (commentid,picid,comment,user,date) VALUES (?,?,?,?,?)");
+        
+        BoundStatement boundStatement = new BoundStatement(ps);
+       session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        commentid,id,comment,user,CommentAdded));
+        return true;
+    
+    }
+    
+    public boolean addGuestBookEntry(String user_owner, String user, String message){
+        Convertors convertor = new Convertors();
+        
+        
+        java.util.UUID bookid = convertor.getTimeUUID();
+        
+        Date date = new Date();
+        
+        Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("insert into guestbook (bookid,message,user_owner,user,date) VALUES (?,?,?,?,?)");
+        
+        BoundStatement boundStatement = new BoundStatement(ps);
+       session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        bookid,message,user_owner,user,date));
+        return true;
+        
+    }
+    
+    public ArrayList<ArrayList<String>> getGuestBook(String username){
+        
+        ArrayList<ArrayList<String>> guestbook=new ArrayList<>();
+        /*** Took this part from web StackOverflow**/
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        
+        
+        
+        Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("select user,message,date FROM guestbook WHERE user_owner=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        commentid,id,comment,user,CommentAdded));
+                        username));
         if (rs.isExhausted()) {
-            System.out.println("Comment added");
-            return true;
+            System.out.println("No guest messages returned");
+            return null;
         } else {
+            for (Row row : rs) {
+                ArrayList<String> x = new ArrayList<>();
+                x.add(0, row.getString("user"));
+                x.add(1,row.getString("message")); 
+             //   if(row.getDate("date")!=null){
+                x.add(2,df.format(row.getDate("date"))); //convert date to string
+              //  }
+                guestbook.add(x);
+            }
+            return guestbook;
+            }
         
-        return false;
     }
     
-    }
-    
+   
 }

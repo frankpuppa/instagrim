@@ -46,6 +46,7 @@
                             
                         <% while (iterator.hasNext()) {
                             Pic p = (Pic) iterator.next();
+//                            if(p==null){continue;}
                            
                     %>
                   

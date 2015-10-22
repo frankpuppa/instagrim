@@ -5,17 +5,22 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
+import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.lib.DbData;
+import uk.ac.dundee.computing.aec.instagrim.models.Comment;
 
 /**
  *
@@ -23,9 +28,16 @@ import uk.ac.dundee.computing.aec.instagrim.lib.DbData;
  */
 @WebServlet(name = "About", urlPatterns = {
     "/About",
-    "/About/*",
+    "/About/*"
 })
 public class About extends HttpServlet {
+    
+    private Cluster cluster;
+    
+    public void init(ServletConfig config) throws ServletException {
+        // TODO Auto-generated method stub
+        cluster = CassandraHosts.getCluster();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,11 +69,19 @@ public class About extends HttpServlet {
         String username=(String)session.getAttribute("user");
         String args[] = Convertors.SplitRequestPath(request);
         request.setAttribute("uservisited",args[2]);
+        
         DbData db=new DbData();
         String picid=db.getProfilePic(args[2]);
         String about=db.getAbout(args[2]);
+        
+        Comment cm=new Comment();
+        cm.setCluster(cluster);
+        ArrayList<ArrayList<String>> guestbook=cm.getGuestBook(args[2]);
+        
+        request.setAttribute("guestbook",guestbook);
         request.setAttribute("profilepic",picid);
         request.setAttribute("about", about);
+        
         RequestDispatcher rd;
         rd = request.getRequestDispatcher("/WEB-INF/view/About.jsp");
         rd.forward(request, response);
@@ -78,7 +98,17 @@ public class About extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String value=request.getParameter("submit");
+        switch (value) {
+            case "guestbook":
+             //write comment
+                writeGuestBook(request,response);
+                break;
+                
+            default:
+                displayError("Values cannot be updated!!",response);
+                break;
+        }
     }
 
     /**
@@ -91,4 +121,45 @@ public class About extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+      private void displayError(String error,HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Error</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h3>"+ error+ "  </h3>");
+            out.println("</body>");
+            out.println("</html>");
+        
+        }
+
+    }
+      
+      private void writeGuestBook(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+         
+        HttpSession session = request.getSession();
+        String username=(String)session.getAttribute("user");
+        if(username==null){
+            username="Anonymous";
+        }
+        
+        String path=request.getContextPath();
+        String message=request.getParameter("guestbook");
+        String args[] = Convertors.SplitRequestPath(request);
+        
+        Comment cm=new Comment();
+        cm.setCluster(cluster);
+        if(cm.addGuestBookEntry(args[2],username,message)){
+            response.sendRedirect(path + "/About/" + args[2]);
+        }else {
+            displayError("About could not be updated! Sorry...",response);
+        }
+      }
 }
+

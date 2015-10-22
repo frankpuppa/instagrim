@@ -24,7 +24,7 @@
             <!-- Default panel contents -->
             <div class="panel-heading">Results</div>
                 <%  ArrayList<ArrayList<String>> array = (ArrayList<ArrayList<String>>)request.getAttribute("usersV");
-                    Set<String>followedUsers = (Set<String>)request.getAttribute("followedUsers");%>
+                    ArrayList<Set<String>>followedUsers = (ArrayList<Set<String>>)request.getAttribute("followedUsers");%>
                                 
             <!-- Table -->
             <table class="table">
@@ -40,22 +40,24 @@
                 </tr>
                 <% if (array != null) {
                         for (int i = 0; i < array.size(); i++) {%>
+                        <tr>
                 
                     <td> <%= i + 1%></td>
                     <% for (int j = 0; j < array.get(i).size(); j++) {%>    
                     <td> <%=array.get(i).get(j)%></td>
                     <%}%>
-                   <% if(followedUsers!=null) {%>
+                    <% if(followedUsers.get(i)!=null) {%>
                    <td><select>
-                        <%for (String s : followedUsers){%>%>  
+                           <% Set<String> set =followedUsers.get(i);
+                            for(String s: set){ %>
+                       
                             <option value="<%=s %>" ><%=s %></option>
-                                  
-                    <%}%>
+                            <%}%>
                        </select></td>
                        
-                    <%}%>
-
-                            
+                    <%}else{%>
+                    <td></td>
+                        <%}%>    
                         <td>
                             <form action="${pageContext.request.contextPath}/Follow" method="POST">
                                 <input type="hidden" name="userN" value="<%= array.get(i).get(0) %>">
@@ -63,7 +65,8 @@
                             </form>
                         </td>
                         <td><a href="${pageContext.request.contextPath}/About/<%=array.get(i).get(0)%>"><%=array.get(i).get(0)%>'s Page</a></td>
-                     <%}%>
+                        </tr>
+                        <%}%>
                      <%}%>
                         
             </table>

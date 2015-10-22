@@ -45,31 +45,32 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        String username=request.getParameter("username");
-//        String password=request.getParameter("password");
-//        String first_name=request.getParameter("first_name");
-//        String last_name=request.getParameter("last_name");
-//        String email=request.getParameter("email");
-//        String address=request.getParameter("address");
-        String[] values =new String[6];
-//        for(int i=0; i<6; i++){
-//                values[i]=new String();
-//            }
+
+        
+        
+        String[] values =new String[7];
+
         values[0]=request.getParameter("username");
         values[1]=request.getParameter("password");
         values[2]=request.getParameter("first_name");
         values[3]=request.getParameter("last_name");
         values[4]=request.getParameter("email");
         values[5]=request.getParameter("address");
-        for(int i=0; i<6; i++){
-                if(values[i]==""){
-                    values[i]=null;
+        values[6]="Please modify your about page!";
+        for(int i=2; i<7; i++){
+                if(values[i].equals("")){
+                    values[i]="";
                 }
             }
+        if(values[0].equals("") || values[1].equals("")){
+            displayError("Username and password are mandatory",response);
+        }
         User us=new User();
         us.setCluster(cluster);
-        //us.RegisterUser(username, password, first_name, last_name, email, address);
-        us.RegisterUser(values[0],values[1],values[2],values[3],values[4],values[5]);
+        if(us.checkUserExist(values[0])){
+            displayError("Username already taken. Please choose another one",response);
+        }
+        us.RegisterUser(values[0],values[1],values[2],values[3],values[4],values[5],values[6]);
         String path=request.getContextPath();
 	response.sendRedirect(path + "/Login");
         
@@ -102,4 +103,21 @@ public class Register extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+     private void displayError(String error,HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Error</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h3>"+ error+ "  </h3>");
+            out.println("</body>");
+            out.println("</html>");
+        
+        }
+
+    }
 }
