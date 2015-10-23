@@ -22,10 +22,10 @@
     <body>
         <div class="container">
             <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
-            <div class="row">
+            <div class="container-fluid">
                 
                 
-            <div class="col-lg-12">
+            <div class="container">
                 <h1 class="page-header">The Gallery</h1>
             </div>
                  
@@ -50,7 +50,7 @@
                            
                     %>
                   
-                        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                        <div class="col-lg-3 col-md-4 col-xs-6 ">
                             <%=p.getOwner()%> <br/>   
                             <a href="${pageContext.request.contextPath}/Image/<%=p.getSUUID()%>"><img src="${pageContext.request.contextPath}/Thumb/<%=p.getSUUID()%>"></a>
                             <%if(p.getOwner().equals(username)){%>
@@ -76,8 +76,18 @@
                                 <!--<tr>-->
                                     <span style="font-weight: bold"><%=comments.get(o).get(2)%> </span> 
                                         <span style="text-align: right"><%=comments.get(o).get(3)%> </span>
-                                        <br/> 
-                                        <%=comments.get(o).get(1)%> <br/>
+                                        <br/>
+                                        <%=comments.get(o).get(1)%> 
+                                        <br/>
+                                        <% if(p.getOwner().equals(username)){%>
+                                        
+                                        <form  action="${pageContext.request.contextPath}/DelComment" method="GET">
+                                         
+                                        <input  class="right"  type="hidden" name="comment" value="<%=comments.get(o).get(4)%>">
+                                        <input class="right"  type="submit" name="name" value="Delete">
+                                        </form>
+                                        <%}%>
+                                                                        
                        
                                <%}%>    
                             <%}%>

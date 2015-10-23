@@ -48,7 +48,8 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
     "/Images/*",
     "/DeletePhoto",
     "/SetProfile",
-    "/AddComment"
+    "/AddComment",
+    "/DelComment"
 })
 @MultipartConfig
 
@@ -72,6 +73,7 @@ public class Image extends HttpServlet {
         CommandsMap.put("DeletePhoto",4);
         CommandsMap.put("SetProfile", 5);
         CommandsMap.put("AddComment",6);
+        CommandsMap.put("DelComment",7);
 
     }
 
@@ -114,6 +116,9 @@ public class Image extends HttpServlet {
             case 6:
                     addComment(request,response);
                 break;
+            case 7:
+                   deleteComment(request,response);
+                break;
             default:
                 error("Bad Operator", response);
         }
@@ -151,9 +156,8 @@ public class Image extends HttpServlet {
                 comments=cm.getComments(comments, p.getSUUID());
         }
         
-        //Sort linked list
     
-        
+        //Sort Pics by date
     //Found part of this online. Then modified to suit my needs
     Collections.sort(lsPics, new Comparator<Pic>() {
         @Override
@@ -168,6 +172,15 @@ public class Image extends HttpServlet {
            
      }
     });
+    
+    //Sort Comments by date
+    Collections.sort(comments, new Comparator<ArrayList<String>>() {    
+        @Override
+        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+            return o1.get(3).compareTo(o2.get(3));
+        }               
+});
+    
         
         
         request.setAttribute("Pics", lsPics);
@@ -284,6 +297,21 @@ public class Image extends HttpServlet {
         }else{
             error("Profile Comment could not be added", response);
         }
+    }
       
+    protected void deleteComment(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        
+        String path=request.getContextPath();
+        String username=(String)session.getAttribute("user");
+        String commentid =(String)request.getParameter("comment");
+        
+        Comment cm=new Comment();
+        cm.setCluster(cluster);
+        if(cm.deleteComment(commentid)){
+	response.sendRedirect(path + "/Images/" + username);
+        }else{
+            error("Comment could not be deleted", response);
+        }
     }
 }

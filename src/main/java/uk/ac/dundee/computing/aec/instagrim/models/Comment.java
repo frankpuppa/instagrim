@@ -43,7 +43,7 @@ public class Comment {
         
         
         Session session = cluster.connect("instafrank");
-        PreparedStatement ps = session.prepare("select comment, user,date FROM comment WHERE picid=? ALLOW FILTERING");
+        PreparedStatement ps = session.prepare("select comment, user,date,commentid FROM comment WHERE picid=? ALLOW FILTERING");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -58,9 +58,9 @@ public class Comment {
                 x.add(0, picid);
                 x.add(1,row.getString("comment")); 
                 x.add(2,row.getString("user"));
-                if(row.getDate("date")!=null){
                 x.add(3,df.format(row.getDate("date"))); //convert date to string
-                }
+              //  UUID commentid=row.getUUID("commentid");
+                x.add(4,row.getUUID("commentid").toString());
                 comments.add(x);
             }
             return comments;
@@ -84,6 +84,23 @@ public class Comment {
        session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         commentid,id,comment,user,CommentAdded));
+        return true;
+    
+    }
+    
+    public boolean deleteComment(String commentid){
+        
+        Convertors convertor = new Convertors();
+        
+        UUID id= UUID.fromString(commentid);
+        
+        Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("delete from comment where commentid=?");
+        
+        BoundStatement boundStatement = new BoundStatement(ps);
+       session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        id));
         return true;
     
     }
