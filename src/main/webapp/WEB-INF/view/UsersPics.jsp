@@ -42,21 +42,23 @@
                         Iterator<Pic> iterator;
                         iterator = lsPics.iterator();%>
                        
-                        <!--<table class="table" style="table-layout:fixed"  >-->
+                       
                             
                         <% while (iterator.hasNext()) {
-                            Pic p = (Pic) iterator.next();
-//                            if(p==null){continue;}
-                           
+                            Pic p = (Pic) iterator.next();                               
                     %>
                   
-                        <div class="col-lg-3 col-md-4 col-xs-6 ">
-                            <%=p.getOwner()%> <br/>   
-                            <a href="${pageContext.request.contextPath}/Image/<%=p.getSUUID()%>"><img src="${pageContext.request.contextPath}/Thumb/<%=p.getSUUID()%>"></a>
+                    <div class="container col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-2">
+                    <div class="container-fluid testaaa">
+                        <br/>
+                        <span style="font-weight:bold;"><%=p.getOwner()%> posted:</span><br/>   
+                            <a href="${pageContext.request.contextPath}/Image/<%=p.getSUUID()%>">
+                                <img class="center-block" src="${pageContext.request.contextPath}/Thumb/<%=p.getSUUID()%>"></a>
+                                <br/>
                             <%if(p.getOwner().equals(username)){%>
                             <form  action="${pageContext.request.contextPath}/DeletePhoto" method="GET">
                                 <input  type="hidden" name="delete" value="<%=p.getSUUID()%>">
-                                <input  type="submit" name="name" value="Delete">
+                                <input  type="submit" name="name" value="Delete Photo">
                             </form>
                             <%}%>
                             <form  action="${pageContext.request.contextPath}/SetProfile" method="GET">
@@ -68,6 +70,7 @@
                                <input    type="hidden" name="picid" value="<%=p.getSUUID()%>">
                                 <input   type="submit" name="name" value="Submit">
                             </form>
+                                <br/>
                             <!--<div class="container">-->
                             <% if(comments !=null){
                                for (int o=0; o<comments.size(); o++){
@@ -78,22 +81,26 @@
                                         <span style="text-align: right"><%=comments.get(o).get(3)%> </span>
                                         <br/>
                                         <%=comments.get(o).get(1)%> 
-                                        <br/>
+                                        
                                         <% if(p.getOwner().equals(username)){%>
                                         
                                         <form  action="${pageContext.request.contextPath}/DelComment" method="GET">
                                          
                                         <input  class="right"  type="hidden" name="comment" value="<%=comments.get(o).get(4)%>">
-                                        <input class="right"  type="submit" name="name" value="Delete">
+                                        <input class="right"  type="submit" name="name" value="Delete Comment">
                                         </form>
+                                        
                                         <%}%>
-                                                                        
-                       
-                               <%}%>    
+                                        <br>
+
+                               <%}%>   
+                               
                             <%}%>
                             <%}%>
                         
-                        </div>
+                    </div>
+                            <br/>
+                    </div>
                             <%}%>
                              <%}%>
             </div>

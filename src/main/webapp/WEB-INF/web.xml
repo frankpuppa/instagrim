@@ -33,10 +33,11 @@
          <url-pattern>/Home/Edit</url-pattern>
         <url-pattern>/Upload</url-pattern>
         <url-pattern>/Images</url-pattern>
+        <url-pattern>/Images/*</url-pattern>
         <url-pattern>/Edit</url-pattern>
          <url-pattern>/EditAbout</url-pattern>
         <url-pattern>/Search</url-pattern>
-        <!--    <url-pattern>/Login</url-pattern>-->
+
     </filter-mapping>
     <!--     <servlet-mapping>
           <servlet-name>Home</servlet-name>

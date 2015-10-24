@@ -133,7 +133,7 @@ public class Comment {
         
         
         Session session = cluster.connect("instafrank");
-        PreparedStatement ps = session.prepare("select user,message,date FROM guestbook WHERE user_owner=?");
+        PreparedStatement ps = session.prepare("select user,message,date,bookid FROM guestbook WHERE user_owner=?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -147,14 +147,29 @@ public class Comment {
                 ArrayList<String> x = new ArrayList<>();
                 x.add(0, row.getString("user"));
                 x.add(1,row.getString("message")); 
-             //   if(row.getDate("date")!=null){
                 x.add(2,df.format(row.getDate("date"))); //convert date to string
-              //  }
+                x.add(3,row.getUUID("bookid").toString());
                 guestbook.add(x);
             }
             return guestbook;
             }
         
+    }
+     public boolean deleteguestBookEntry(String guestbookid){
+        
+        Convertors convertor = new Convertors();
+        
+        UUID id= UUID.fromString(guestbookid);
+        
+        Session session = cluster.connect("instafrank");
+        PreparedStatement ps = session.prepare("delete from guestbook where commentid=?");
+        
+        BoundStatement boundStatement = new BoundStatement(ps);
+       session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        id));
+        return true;
+    
     }
     
    

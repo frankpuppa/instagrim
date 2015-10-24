@@ -89,6 +89,7 @@ public class Image extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         String args[] = Convertors.SplitRequestPath(request);
+        
         int command;
         try {
             command = (Integer) CommandsMap.get(args[1]);
@@ -96,12 +97,14 @@ public class Image extends HttpServlet {
             error("Bad Operator", response);
             return;
         }
+        
         //argv[0]=Instagrim argv[1]=Images argv[3]=username
         switch (command) {
             case 1:
                 DisplayImage(Convertors.DISPLAY_PROCESSED,args[2], response);
                 break;
             case 2: 
+                checkFollowed(args[2],request,response);
                 DisplayImageList(args[2], request, response);
                 break;
             case 3:
@@ -187,6 +190,10 @@ public class Image extends HttpServlet {
         request.setAttribute("Comments",comments );
         }
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/UsersPics.jsp");
+        // Set standard HTTP/1.1 no-cache headers.
+           response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
+          // Set standard HTTP/1.0 no-cache header.
+           response.setHeader("Pragma", "no-cache");
         rd.forward(request, response);
 
     }
@@ -314,4 +321,31 @@ public class Image extends HttpServlet {
             error("Comment could not be deleted", response);
         }
     }
+    
+    protected void checkFollowed(String user,HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String path=request.getContextPath();
+        String username=(String)session.getAttribute("user");
+        Set<String> followedUsers=(Set<String>)session.getAttribute("followedUserSet");
+        
+        boolean follow=false;
+        if(user.equals(username)){
+            return;
+        }
+        for(String s: followedUsers){
+        if(s.equals(user)){
+          follow=true;
+          break;
+        }
+        }
+        
+        if(follow){
+           return;
+        }else{
+           error("You are not following the user, therefore you are not allowed to visit his personal page!",response);
+        }
+        
+        }
+        
+    
 }

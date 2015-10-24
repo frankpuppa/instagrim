@@ -74,8 +74,14 @@ public class Home extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        
+        if(session.getAttribute("user")==null){
         LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn"); 
         session.setAttribute("user", lg.getUsername());
+        
+        }
+        setFollowedUs(request);
+        
         RequestDispatcher rd =request.getRequestDispatcher("/WEB-INF/view/Home.jsp");
         
         String args[] = Convertors.SplitRequestPath(request);
@@ -253,5 +259,17 @@ public class Home extends HttpServlet {
             String picid=db.getProfilePic(username);
             request.setAttribute("profilepic",picid);
             //System.out.println("Session in servlet "+session);
+    }
+    
+    protected void setFollowedUs(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String username=(String)session.getAttribute("user");
+        User us =new User();
+        us.setCluster(cluster);
+        Set<String> followedSet=us.getFollowedUsers(username);
+        if(session.getAttribute("followedUserSet")!=null){
+            session.removeAttribute("followedUserSet");
+        }
+        session.setAttribute("followedUserSet", followedSet);
     }
 }

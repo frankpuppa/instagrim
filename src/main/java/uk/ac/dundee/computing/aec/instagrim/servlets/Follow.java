@@ -9,6 +9,7 @@ import com.datastax.driver.core.Cluster;
 import java.lang.Boolean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -102,6 +103,11 @@ Cluster cluster=null;
             //request.setAttribute("usersV", users);
             //System.out.println("Session in servlet "+session);
              if(test){
+                 //Ask Andy
+//                 Set<String> followedUsersSet=(Set<String>)session.getAttribute("followedUserSet");
+//                 followedUsersSet.add(userN);
+//                 session.removeAttribute("followedUserSet");
+//                 session.setAttribute("followedUserSet", followedUsersSet);
                  //ystem.out.println("OK USER ADDED");
                  response.sendRedirect(path + "/Home");
              }else{

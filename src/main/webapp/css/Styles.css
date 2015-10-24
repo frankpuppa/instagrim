@@ -40,10 +40,7 @@ nav2 {
     border-radius: 25px;
 }
 
-/*.testaaa{
-    height:300px;
-     width:370px;
+.testaaa{ 
      border-radius: 25px;
-     background-color: greenyellow;
-     visibility:visible;
-}*/
+     background-color:#eee;
+}

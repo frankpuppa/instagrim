@@ -8,6 +8,8 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -97,6 +99,11 @@ public class Unfollow extends HttpServlet {
             String username=(String)session.getAttribute("user");
             boolean test=us.unfollowUser(userfollowed,username);
             if(test){
+                //Ask Andy
+//                Set<String> followedUsersSet=(Set<String>)session.getAttribute("followedUserSet");
+//                 followedUsersSet.remove(userfollowed);
+//                 session.removeAttribute("followedUserSet");
+//                 session.setAttribute("followedUserSet", followedUsersSet);
                  //ystem.out.println("OK USER ADDED");
                  response.sendRedirect(path + "/Home");
              }else{

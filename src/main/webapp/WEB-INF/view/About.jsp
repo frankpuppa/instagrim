@@ -15,7 +15,8 @@
     </head>
     <header class="bgimage"></header>
     <body>
-        <% String uservisited = (String)request.getAttribute("uservisited");
+        <% String username =(String)request.getSession().getAttribute("user");
+           String uservisited = (String)request.getAttribute("uservisited");
            String picid = (String) request.getAttribute("profilepic");
            String about =(String) request.getAttribute("about");
            ArrayList<ArrayList<String>> guestbook = (ArrayList<ArrayList<String>>) request.getAttribute("guestbook");%>
@@ -56,6 +57,14 @@
                             <% if(guestbook!=null){
                                  for (int i = 0; i < guestbook.size(); i++) {%>
                                  <div class="panel-heading"> 
+                                    <%if(username.equals(uservisited)){%>
+                                     <div class="pull-right">
+                                         <form  action="${pageContext.request.contextPath}/About/Del" method="POST">
+                                             <input  type="hidden" name="delete" value="<%=guestbook.get(i).get(3)+"="+guestbook.get(i).get(2)%>">
+                                             <input  type="submit" name="submit" value="Delete">
+                                         </form>
+                                     </div>
+                                             <%}%>
                                      <p>Left by: <span style="font-weight: bold"><%=guestbook.get(i).get(0)%></span>&nbsp; 
                                          <span style="text-align: right"><%=guestbook.get(i).get(2)%></span></p>
                                

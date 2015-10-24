@@ -104,7 +104,9 @@ public class About extends HttpServlet {
              //write comment
                 writeGuestBook(request,response);
                 break;
-                
+            case "Delete":
+                deleteGuestBookEntry(request,response);
+                break;
             default:
                 displayError("Values cannot be updated!!",response);
                 break;
@@ -161,5 +163,25 @@ public class About extends HttpServlet {
             displayError("About could not be updated! Sorry...",response);
         }
       }
+
+    private void deleteGuestBookEntry(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+       
+        HttpSession session = request.getSession();
+        String username=(String)session.getAttribute("user");
+
+        String path=request.getContextPath();
+        String guestbookid=request.getParameter("delete");
+        String args[] = Convertors.SplitRequestPath(request);
+        
+        Comment cm=new Comment();
+        cm.setCluster(cluster); 
+        if(cm.deleteguestBookEntry(guestbookid)){
+            response.sendRedirect(path + "/About/" + args[2]);
+        }else {
+            displayError("Guestbook entry cannot be delete!! Sorry...",response);
+        }
+        
+    }
 }
 
