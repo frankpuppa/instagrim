@@ -17,7 +17,7 @@
         <div class="jumbotron">
 
             <h3>Edit Profile Values</h3>
-            <form method="POST"  action="Home">
+            <form method="POST"  action="">
 <!--                <div class="form-group">
                     <label for="Name">User Name: </label> 
 <input type="text" name="username" size="20" class="form-control" value="<%--<%=array.get(0)%>--%>">
@@ -48,7 +48,7 @@
                     <input type="password" name="password" size="20" class="form-control">
                 </div>
 
-                <button type="submit" value="edit" class="btn btn-default">Edit Values</button>
+                <button type="submit" value="edit" name="submit" class="btn btn-default">Edit Values</button>
             </form>
         </div>
     </div>

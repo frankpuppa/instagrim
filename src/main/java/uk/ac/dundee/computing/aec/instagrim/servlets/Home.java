@@ -190,7 +190,7 @@ public class Home extends HttpServlet {
         String path=request.getContextPath();
 	
         
-        String[] values =new String[6];
+        String[] values =new String[7];
         values[0]=(String)session.getAttribute("user");
         values[1]=request.getParameter("password");
         values[2]=request.getParameter("first_name");
@@ -198,6 +198,7 @@ public class Home extends HttpServlet {
         values[4]=request.getParameter("email");
         values[5]=request.getParameter("address");
         values[6]=request.getParameter("about");
+        
         for(int i=0; i<values.length; i++){
                 if(values[i]==""){
                     values[i]=null;
@@ -207,7 +208,7 @@ public class Home extends HttpServlet {
         us.setCluster(cluster);
         //us.RegisterUser(username, password, first_name, last_name, email, address);
         if(us.updateProfile(values[0],values[1],values[2],values[3],values[4],values[5],values[6])){
-	response.sendRedirect(path);
+	response.sendRedirect(path + "/Home");
         }else{
             displayError("Profile Could not be update! Sorry...",response);
         }
