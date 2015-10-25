@@ -5,7 +5,7 @@
 --%>
 
 
-     
+     <div class="container">
     <h2> <center>Your world in Black and White</center></h2>
     
      <div class=" col-xs-4 col-xs-offset-4 bottombar text-center" id="bar" >
@@ -16,6 +16,5 @@
             <li><a href="${pageContext.request.contextPath}/Login">Login</a></li>
         </ul>
      </div>  
-        
-</div>           
-
+         
+     </div>
