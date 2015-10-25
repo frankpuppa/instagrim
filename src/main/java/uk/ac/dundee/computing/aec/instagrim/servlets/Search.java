@@ -129,7 +129,9 @@ public class Search extends HttpServlet {
             ArrayList<Set<String>> followedUsers=new ArrayList<>();
            
             ArrayList<ArrayList<String>> users=us.searchUser(username);
-            
+            if(users==null){
+                return;
+            }
             for(int i=0; i<users.size(); i++ ){
                 followedUsers.add(us.getFollowedUsers(users.get(i).get(0)));
             }
