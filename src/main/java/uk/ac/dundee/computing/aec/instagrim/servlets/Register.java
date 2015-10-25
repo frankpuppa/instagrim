@@ -88,9 +88,8 @@ public class Register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         RequestDispatcher rd;
-        rd = request.getRequestDispatcher("/WEB-INF/view/Register.jsp");
-         rd.forward(request,response);
+          RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/Register.jsp");
+        rd.forward(request, response);
     }
     
     /**

@@ -47,8 +47,9 @@
     <div class="bottombar text-center" id="bar" >
 
         <ul class="list-inline" >
+             <li><a href="${pageContext.request.contextPath}">Index</a></li>
              <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
-                    
+             <li><a href="${pageContext.request.contextPath}/Login">Login</a></li>                   
         </ul>
      </div>
         <div class="bgfootimg"></div>

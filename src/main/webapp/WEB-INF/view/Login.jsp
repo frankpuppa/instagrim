@@ -33,6 +33,7 @@
 
         <ul class="list-inline" >
             <li><a href="${pageContext.request.contextPath}">Index</a></li>
+            <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/Register">Register</a></li>
                     
         </ul>
