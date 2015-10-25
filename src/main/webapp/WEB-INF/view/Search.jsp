@@ -17,7 +17,8 @@
             <h3 class=>Search User: </h3> <input type="text" name="fname">
 
             <input type="submit" value="Submit">
-        </form> 
+        </form>
+            <p> '*' to search all users</p>
         <br><br>
         <div class="container-fluid">
         <div class="panel panel-default">
@@ -81,7 +82,7 @@
 
 
 
-    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
+    <div class="col-xs-4 col-xs-offset-4 bottombar text-center" id="bar" >
 
                     <ul class="list-inline" >
                         <li><a href="${pageContext.request.contextPath}">Index</a></li>

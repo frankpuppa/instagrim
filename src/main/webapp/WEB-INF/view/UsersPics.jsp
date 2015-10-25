@@ -65,12 +65,13 @@
                                 <input   type="hidden" name="setProfile" value="<%=p.getSUUID()%>">
                                 <input   type="submit" name="name" value="Set as Profile">
                             </form>
+                                <p>Leave a Comment</p>
                             <form  action="${pageContext.request.contextPath}/AddComment" method="GET">
                                 <input   type="text" name="comment" value="">
                                <input    type="hidden" name="picid" value="<%=p.getSUUID()%>">
                                 <input   type="submit" name="name" value="Submit">
                             </form>
-                                <br/>
+                               
                             <!--<div class="container">-->
                             <% if(comments !=null){
                                for (int o=0; o<comments.size(); o++){
@@ -90,12 +91,13 @@
                                         <input class="right"  type="submit" name="name" value="Delete Comment">
                                         </form>
                                         
-                                        <%}%>
-                                        <br>
-
+                                        <%}else{%>
+                                        <br/>
+                                        <%}%>       
                                <%}%>   
                                
                             <%}%>
+                            <br/>
                             <%}%>
                         
                     </div>
@@ -107,7 +109,7 @@
             
 
 
-         <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-6  col-xs-offset-3 text-center bottombar" id="bar" >
+         <div class="col-xs-4 col-xs-offset-4 bottombar text-center" id="bar" >
 
             <ul class="list-inline" >
                 <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>

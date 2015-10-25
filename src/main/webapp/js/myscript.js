@@ -30,9 +30,9 @@ $("#sidebar-wrapper").css("height", (containerHomeHeight+"px"));
 /*      SET BOTTOM TOOLBAR AND FOOTER   */
 if (bodyheight<windowheight){
       $(".bgfootimg").css("position", "absolute");
-      $("#bar").css("position", "absolute");
+      $("#bar").css("position", "fixed");
       $("#bar").css("bottom", "80px");
-      $("#bar").css("margin-left", center+"px" );
+      //$("#bar").css("margin-left", center+"px" );
         }
         
 // function hideShowClick() {

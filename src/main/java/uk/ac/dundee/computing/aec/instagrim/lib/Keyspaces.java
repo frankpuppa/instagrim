@@ -68,8 +68,8 @@ public final class Keyspaces {
                     + "user_owner varchar,\n"
                     + "user  varchar,\n"
                     + "date timestamp,\n"
-                    + "PRIMARY KEY (user_owner,date)\n"
-                    + ") WITH CLUSTERING ORDER BY (date desc);";
+                    + "PRIMARY KEY (bookid,user_owner,date)\n"
+                    + ");";
             Session session = c.connect();
             try {
                 PreparedStatement statement = session

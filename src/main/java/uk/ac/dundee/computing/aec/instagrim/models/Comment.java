@@ -133,7 +133,7 @@ public class Comment {
         
         
         Session session = cluster.connect("instafrank");
-        PreparedStatement ps = session.prepare("select user,message,date,bookid FROM guestbook WHERE user_owner=?");
+        PreparedStatement ps = session.prepare("select user,message,date,bookid FROM guestbook WHERE user_owner=? ALLOW FILTERING");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -162,7 +162,7 @@ public class Comment {
         UUID id= UUID.fromString(guestbookid);
         
         Session session = cluster.connect("instafrank");
-        PreparedStatement ps = session.prepare("delete from guestbook where commentid=?");
+        PreparedStatement ps = session.prepare("delete from guestbook where bookid=?");
         
         BoundStatement boundStatement = new BoundStatement(ps);
        session.execute( // this is where the query is executed

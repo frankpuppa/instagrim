@@ -9,6 +9,8 @@ import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -76,8 +78,16 @@ public class About extends HttpServlet {
         
         Comment cm=new Comment();
         cm.setCluster(cluster);
-        ArrayList<ArrayList<String>> guestbook=cm.getGuestBook(args[2]);
         
+        ArrayList<ArrayList<String>> guestbook=cm.getGuestBook(args[2]);
+        if(guestbook!=null){
+        Collections.sort(guestbook, new Comparator<ArrayList<String>>() {    
+        @Override
+        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+            return o1.get(2).compareTo(o2.get(2));
+        }               
+});
+        }     
         request.setAttribute("guestbook",guestbook);
         request.setAttribute("profilepic",picid);
         request.setAttribute("about", about);
@@ -157,6 +167,7 @@ public class About extends HttpServlet {
         
         Comment cm=new Comment();
         cm.setCluster(cluster);
+        
         if(cm.addGuestBookEntry(args[2],username,message)){
             response.sendRedirect(path + "/About/" + args[2]);
         }else {
@@ -169,15 +180,15 @@ public class About extends HttpServlet {
        
         HttpSession session = request.getSession();
         String username=(String)session.getAttribute("user");
-
         String path=request.getContextPath();
         String guestbookid=request.getParameter("delete");
-        String args[] = Convertors.SplitRequestPath(request);
         
         Comment cm=new Comment();
         cm.setCluster(cluster); 
+       
         if(cm.deleteguestBookEntry(guestbookid)){
-            response.sendRedirect(path + "/About/" + args[2]);
+            
+            response.sendRedirect(path + "/About/" + username );
         }else {
             displayError("Guestbook entry cannot be delete!! Sorry...",response);
         }
