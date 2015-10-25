@@ -20,7 +20,7 @@
             <url-pattern>/WEB-INF/view/Edit.jsp</url-pattern>
             <url-pattern>/WEB-INF/view/EditAbout.jsp</url-pattern>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
-            <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
+            <!--<include-coda>/WEB-INF/jspf/footer.jspf</include-coda>-->
         </jsp-property-group>
     </jsp-config>
     <filter>

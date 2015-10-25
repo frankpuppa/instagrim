@@ -42,14 +42,20 @@
             </form>
         </div>
     </div>
-
-
-<div class="col-xs-4 col-xs-offset-4 bottombar text-center" id="bar" >
-
-    <ul class="list-inline" >
-        <li><a href="${pageContext.request.contextPath}">Home</a></li>
-<!--        <li><a href="${pageContext.request.contextPath}/Images/majed">Sample Images</a></li-->
-
-    </ul>
 </div>
-    </div>
+<footer>
+    <div class="bottombar text-center" id="bar" >
+
+        <ul class="list-inline" >
+             <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+                    
+        </ul>
+     </div>
+        <div class="bgfootimg"></div>
+</footer>
+         </body>
+<script src="js/jquery-1.11.3.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.js"></script>
+<script src="js/myscript.js"></script>
+</html>

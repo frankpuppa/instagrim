@@ -10,8 +10,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <div class="container">
-    <div class="container">
-    
+
         <h1>INSTAgrim ! </h1> <h2 class="text-center">Your world in Black and White</h2>
         <div class="row">
             <form action="${pageContext.request.contextPath}/Search" method="POST">
@@ -76,19 +75,24 @@
                 </div>
             </div>
         </div>
+</div>
   
- 
+                        <footer>
+                            <div class="bottombar text-center" id="bar" >
 
-    <div class="col-xs-4 col-xs-offset-4 bottombar text-center" id="bar" >
+                                <ul class="list-inline" >
+                                    <li><a href="${pageContext.request.contextPath}">Index</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/Upload">Upload</a></li>   
+                                    <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
+                                </ul>
+                            </div>
+                            <div class="bgfootimg"></div>
+                        </footer>
+</body>
+<script src="js/jquery-1.11.3.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.js"></script>
+<script src="js/myscript.js"></script>
+</html>
 
-        <ul class="list-inline" >
-            <li><a href="${pageContext.request.contextPath}">Index</a></li>
-            <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
-            <li><a href="${pageContext.request.contextPath}/Upload">Upload</a></li>   
-            <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
-        </ul>
-    </div>
-         
-  </div>
-        </div>
-        

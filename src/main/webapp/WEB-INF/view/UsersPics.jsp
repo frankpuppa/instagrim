@@ -22,11 +22,8 @@
     <body>
         <div class="container">
             
-                <div class="container">
                     <h1>INSTAgrim ! </h1> 
                     <h2 class="text-center">Your world in Black and White</h2>
-                    <div class="container">
-
 
                         <!--<div class="container">-->
                         <h1 class="page-header">The Gallery</h1>
@@ -51,7 +48,7 @@
                                 Pic p = (Pic) iterator.next();
                         %>
 
-                        <div class="container col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-2">
+                        <div class="container col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-3">
                             <div class="container-fluid testaaa">
                                 <br/>
                                 <span style="font-weight:bold;"><%=p.getOwner()%> posted:</span><br/>   
@@ -108,28 +105,25 @@
                         </div>
                         <%}%>
                         <%}%>
-                    </div>
+                    
                     <br/>
-                </div>
-           
+                </div>          
+   
+<footer>
+    <div class="bottombar text-center" id="bar" >
 
-            <div class="col-xs-4 col-xs-offset-4  bottombar text-center" id="bar">
-
-                <ul class="list-inline"  >
-                    <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+        <ul class="list-inline" >
+             <li><a href="${pageContext.request.contextPath}/Home">Home</a></li>
                     <li><a href="${pageContext.request.contextPath}/Upload">Upload</a></li>   
                     <li><a href="${pageContext.request.contextPath}/Images/<%=request.getSession().getAttribute("user")%>"> Your Pics</a></li>
-
-                </ul>
-            </div>  
-        </div>
-    </body>
-
-
-    <footer class="bgfootimg"></footer>
-
-    <script src="../js/jquery-1.11.3.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../js/bootstrap.js"></script>
-    <script src="../js/myscript.js"></script>
+                    <li><a href="${pageContext.request.contextPath}/Logout">Logout</a></li>
+        </ul>
+     </div>
+        <div class="bgfootimg"></div>
+</footer>
+         </body>
+<script src="js/jquery-1.11.3.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.js"></script>
+<script src="js/myscript.js"></script>
 </html>

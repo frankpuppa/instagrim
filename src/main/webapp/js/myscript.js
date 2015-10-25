@@ -31,9 +31,9 @@ $("#sidebar-wrapper").css("height", (containerHomeHeight+"px"));
 if (bodyheight<windowheight){
       $(".bgfootimg").css("position", "absolute");
       $("#bar").css("position", "absolute");
-      $("#bar").css("bottom", "80px");  
-    $("#bar").css("margin-left", center+"px" );
-        }
+//      $("#bar").css("bottom", "80px");  
+//    $("#bar").css("margin-left", center+"px" );
+         }
         
 // function hideShowClick() {
 //     if($("#testtt").is(":visible")){
