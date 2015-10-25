@@ -57,7 +57,7 @@
                             <% if(guestbook!=null){
                                  for (int i = 0; i < guestbook.size(); i++) {%>
                                  <div class="panel-heading"> 
-                                    <%if(username.equals(uservisited)){%>
+                                    <%if(username!=null && username.equals(uservisited)){%>
                                      <div class="pull-right">
                                          <form  action="${pageContext.request.contextPath}/About/Del" method="POST">
                                              <input  type="hidden" name="delete" value="<%=guestbook.get(i).get(3)%>">
