@@ -18,7 +18,7 @@
 //  console.log("DIV "+ containerHomeHeight);
     //console.log("sidebar"+sidebar);
 //console.log("bodyheight" + bodyheight);
-//console.log("windowheight"+windowheight)
+//console.log("windowheight"+windowheight);
 //     console.log("barwidth " + barwidth);
 //   console.log("bodywidth " + wWidth +"px");
 //    console.log("center " + center +"px");
